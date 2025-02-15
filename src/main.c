@@ -3,7 +3,10 @@
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_main.h>
 #include <SDL3/SDL_rect.h>
+#include <SDL3/SDL_stdinc.h>
 #include <SDL3/SDL_timer.h>
+
+#include "game_logic.h"
 
 #define WINDOW_WIDTH 640
 #define WINDOW_HEIGHT 480
@@ -11,6 +14,7 @@
 typedef struct {
     SDL_Window* window;
     SDL_Renderer* renderer;
+    GameContext* ctx;
 } AppState;
 
 SDL_AppResult SDL_AppInit(void** appstate, int argc, char* argv[]) {
@@ -38,6 +42,9 @@ SDL_AppResult SDL_AppInit(void** appstate, int argc, char* argv[]) {
         return SDL_APP_FAILURE;
     }
 
+    as->ctx = SDL_malloc(sizeof(GameContext));
+    init_game(as->ctx);
+
     return SDL_APP_CONTINUE;
 }
 
@@ -53,13 +60,21 @@ SDL_AppResult SDL_AppIterate(void* appstate) {
     SDL_SetRenderDrawColor(as->renderer, 33, 33, 33, SDL_ALPHA_OPAQUE);
     SDL_RenderClear(as->renderer);
 
+    Uint64 now           = SDL_GetTicks();
+    Uint64 delta         = now - as->ctx->last_update;
+    as->ctx->last_update = now;
     SDL_SetRenderDrawColor(as->renderer, 0, 0, 255, SDL_ALPHA_OPAQUE);
-    SDL_FRect rect;
-    rect.x = (WINDOW_WIDTH / 2.0) - 25;
-    rect.y = (WINDOW_HEIGHT / 2.0) - 25;
-    rect.w = 50;
-    rect.h = 50;
-    SDL_RenderFillRect(as->renderer, &rect);
+
+    for (int i = 0; i < MAX_FISHES; i++) {
+        Fish* current_fish = as->ctx->fishes[i];
+        move_fish(current_fish, delta);
+        SDL_FRect rect;
+        rect.x = current_fish->x;
+        rect.y = current_fish->y;
+        rect.w = 50;
+        rect.h = 50;
+        SDL_RenderFillRect(as->renderer, &rect);
+    }
 
     SDL_RenderPresent(as->renderer);
 
