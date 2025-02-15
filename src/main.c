@@ -27,7 +27,7 @@ SDL_AppResult SDL_AppInit(void** appstate, int argc, char* argv[]) {
     *appstate = as;
 
     if (!SDL_CreateWindowAndRenderer(
-            "ice-fishing",
+            "Ice Fishing",
             WINDOW_WIDTH,
             WINDOW_HEIGHT,
             0,
