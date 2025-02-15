@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.10)
 
-project(new_chad_neural LANGUAGES C)
+project(ice_fishing LANGUAGES C)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
