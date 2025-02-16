@@ -1,8 +1,6 @@
 #include <stdlib.h>
 
-#include "game_logic.h"
-
-void move_fish(Fish* fish, unsigned long delta_time) { fish->x += delta_time * fish->speed; }
+#include <game_logic.h>
 
 void init_game(GameContext* ctx) {
     for (int i = 0; i < MAX_FISHES; i++) {

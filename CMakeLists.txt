@@ -12,5 +12,8 @@ find_package(SDL3 REQUIRED CONFIG REQUIRED COMPONENTS SDL3-shared)
 #     add_compile_options(-Wall -Wextra -Wpedantic -O3)
 # endif()
 
-add_executable(ice-fishing src/main.c src/game_logic.c)
+file(GLOB_RECURSE SOURCES ${PROJECT_SOURCE_DIR}/src/*.c)
+
+add_executable(ice-fishing ${SOURCES})
+target_include_directories(ice-fishing PRIVATE ${PROJECT_SOURCE_DIR}/src)
 target_link_libraries(ice-fishing PRIVATE SDL3::SDL3)

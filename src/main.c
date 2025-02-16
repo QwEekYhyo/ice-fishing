@@ -6,7 +6,7 @@
 #include <SDL3/SDL_stdinc.h>
 #include <SDL3/SDL_timer.h>
 
-#include "game_logic.h"
+#include <game_logic.h>
 
 #define WINDOW_WIDTH 640
 #define WINDOW_HEIGHT 480
