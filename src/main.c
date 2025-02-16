@@ -6,12 +6,9 @@
 #include <SDL3/SDL_stdinc.h>
 #include <SDL3/SDL_timer.h>
 
+#include <common_defs.h>
+#include <fish/fish.h>
 #include <game_logic.h>
-
-#define WINDOW_WIDTH 1280
-#define WINDOW_HEIGHT 720
-
-#define WATER_Y WINDOW_HEIGHT / 3.0
 
 typedef struct {
     SDL_Window* window;
@@ -81,17 +78,23 @@ SDL_AppResult SDL_AppIterate(void* appstate) {
 
     for (int i = 0; i < MAX_FISHES; i++) {
         Fish* current_fish = &as->ctx->fishes[i];
-        move_fish(current_fish, delta);
-        rect.x = current_fish->x;
-        rect.y = current_fish->y + WATER_Y;
-        rect.w = 50;
-        rect.h = 50;
-        SDL_RenderFillRect(as->renderer, &rect);
+        if (current_fish->state == DEAD) {
+            Sint32 probability = SDL_rand(100);
+            /* This might seem very low but it's not */
+            if (probability < 1) spawn_fish(current_fish);
+        } else {
+            move_fish(current_fish, delta);
+            rect.x = current_fish->x;
+            rect.y = current_fish->y;
+            rect.w = 50;
+            rect.h = 50;
+            SDL_RenderFillRect(as->renderer, &rect);
+        }
     }
 
     SDL_RenderPresent(as->renderer);
 
-    SDL_Delay(100);
+    SDL_Delay(20);
     return SDL_APP_CONTINUE;
 }
 
