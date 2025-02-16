@@ -8,8 +8,10 @@
 
 #include <game_logic.h>
 
-#define WINDOW_WIDTH 640
-#define WINDOW_HEIGHT 480
+#define WINDOW_WIDTH 1280
+#define WINDOW_HEIGHT 720
+
+#define WATER_Y WINDOW_HEIGHT / 3.0
 
 typedef struct {
     SDL_Window* window;
@@ -57,8 +59,20 @@ SDL_AppResult SDL_AppEvent(void* appstate, SDL_Event* event) {
 SDL_AppResult SDL_AppIterate(void* appstate) {
     AppState* as = (AppState*) appstate;
 
-    SDL_SetRenderDrawColor(as->renderer, 33, 33, 33, SDL_ALPHA_OPAQUE);
+    /* Draw background */
+    SDL_SetRenderDrawColor(as->renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
     SDL_RenderClear(as->renderer);
+
+    SDL_FRect rect;
+    SDL_SetRenderDrawColor(as->renderer, 75, 132, 211, SDL_ALPHA_OPAQUE);
+    rect.w = WINDOW_WIDTH;
+    rect.h = WINDOW_HEIGHT;
+    rect.y = WATER_Y - 20.0;
+    SDL_RenderFillRect(as->renderer, &rect);
+
+    SDL_SetRenderDrawColor(as->renderer, 31, 58, 94, SDL_ALPHA_OPAQUE);
+    rect.y = WATER_Y;
+    SDL_RenderFillRect(as->renderer, &rect);
 
     Uint64 now           = SDL_GetTicks();
     Uint64 delta         = now - as->ctx->last_update;
@@ -68,9 +82,8 @@ SDL_AppResult SDL_AppIterate(void* appstate) {
     for (int i = 0; i < MAX_FISHES; i++) {
         Fish* current_fish = &as->ctx->fishes[i];
         move_fish(current_fish, delta);
-        SDL_FRect rect;
         rect.x = current_fish->x;
-        rect.y = current_fish->y;
+        rect.y = current_fish->y + WATER_Y;
         rect.w = 50;
         rect.h = 50;
         SDL_RenderFillRect(as->renderer, &rect);
