@@ -4,7 +4,7 @@
 #include <fish/fish.h>
 
 typedef struct {
-    Fish* fishes[MAX_FISHES];
+    Fish fishes[MAX_FISHES];
     unsigned long last_update;
 } GameContext;
 

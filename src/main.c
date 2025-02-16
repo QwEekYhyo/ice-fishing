@@ -25,7 +25,7 @@ SDL_AppResult SDL_AppInit(void** appstate, int argc, char* argv[]) {
         return SDL_APP_FAILURE;
     }
 
-    AppState* as = (AppState*) SDL_calloc(1, sizeof(AppState));
+    AppState* as = SDL_malloc(sizeof(AppState));
     if (!as) return SDL_APP_FAILURE;
 
     *appstate = as;
@@ -66,7 +66,7 @@ SDL_AppResult SDL_AppIterate(void* appstate) {
     SDL_SetRenderDrawColor(as->renderer, 0, 0, 255, SDL_ALPHA_OPAQUE);
 
     for (int i = 0; i < MAX_FISHES; i++) {
-        Fish* current_fish = as->ctx->fishes[i];
+        Fish* current_fish = &as->ctx->fishes[i];
         move_fish(current_fish, delta);
         SDL_FRect rect;
         rect.x = current_fish->x;
@@ -88,5 +88,6 @@ void SDL_AppQuit(void* appstate, SDL_AppResult result) {
     AppState* as = (AppState*) appstate;
     SDL_DestroyRenderer(as->renderer);
     SDL_DestroyWindow(as->window);
+    SDL_free(as->ctx);
     SDL_free(as);
 }
