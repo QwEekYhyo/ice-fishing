@@ -2,6 +2,7 @@
 
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_main.h>
+#include <SDL3/SDL_mouse.h>
 #include <SDL3/SDL_rect.h>
 #include <SDL3/SDL_stdinc.h>
 #include <SDL3/SDL_timer.h>
@@ -81,8 +82,18 @@ SDL_AppResult SDL_AppIterate(void* appstate) {
     SDL_SetRenderDrawColor(as->renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
     rect.w = 60;
     rect.h = 90;
-    rect.x = WINDOW_WIDTH * 2.0 / 3.0 + 20;
-    rect.y = WATER_Y - 125.0;
+    rect.x += 20;
+    rect.y += 45.0;
+    SDL_RenderFillRect(as->renderer, &rect);
+
+    /* Draw hook */
+    float mouse_y;
+    SDL_GetMouseState(NULL, &mouse_y);
+    rect.w = rect.h = 24;
+
+    rect.y = mouse_y - 12;
+    rect.x -= 70;
+    SDL_SetRenderDrawColor(as->renderer, 246, 250, 1, SDL_ALPHA_OPAQUE);
     SDL_RenderFillRect(as->renderer, &rect);
 
     /* Draw fishes */
@@ -101,8 +112,8 @@ SDL_AppResult SDL_AppIterate(void* appstate) {
             move_fish(current_fish, delta);
             rect.x = current_fish->x;
             rect.y = current_fish->y;
-            rect.w = 50;
-            rect.h = 50;
+
+            rect.w = rect.h = 50;
             SDL_RenderFillRect(as->renderer, &rect);
         }
     }
