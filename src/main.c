@@ -8,6 +8,7 @@
 #include <SDL3/SDL_timer.h>
 
 #include <common_defs.h>
+#include <drawing_utils.h>
 #include <fish/fish.h>
 #include <game_logic.h>
 
@@ -73,28 +74,17 @@ SDL_AppResult SDL_AppIterate(void* appstate) {
     SDL_RenderFillRect(as->renderer, &rect);
 
     /* Draw static player */
-    SDL_SetRenderDrawColor(as->renderer, 245, 0, 21, SDL_ALPHA_OPAQUE);
-    rect.w = 100;
-    rect.h = 150;
-    rect.x = WINDOW_WIDTH * 2.0 / 3.0;
-    rect.y = WATER_Y - 170.0;
-    SDL_RenderFillRect(as->renderer, &rect);
-    SDL_SetRenderDrawColor(as->renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
-    rect.w = 60;
-    rect.h = 90;
-    rect.x += 20;
-    rect.y += 45.0;
-    SDL_RenderFillRect(as->renderer, &rect);
+    draw_player(as->renderer);
 
     /* Draw hook */
     float mouse_y;
     SDL_GetMouseState(NULL, &mouse_y);
     rect.w = rect.h = 24;
 
-    rect.y = mouse_y - 12;
-    rect.x -= 70;
+    rect.y = mouse_y;
+    rect.x = HOOK_X;
     SDL_SetRenderDrawColor(as->renderer, 246, 250, 1, SDL_ALPHA_OPAQUE);
-    SDL_RenderFillRect(as->renderer, &rect);
+    draw_rect_around_x(as->renderer, &rect);
 
     /* Draw fishes */
     Uint64 now           = SDL_GetTicks();
