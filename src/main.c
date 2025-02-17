@@ -52,6 +52,16 @@ SDL_AppResult SDL_AppInit(void** appstate, int argc, char* argv[]) {
 SDL_AppResult SDL_AppEvent(void* appstate, SDL_Event* event) {
     if (event->type == SDL_EVENT_QUIT) return SDL_APP_SUCCESS;
 
+    if (event->type == SDL_EVENT_MOUSE_BUTTON_DOWN) {
+        AppState* as = (AppState*) appstate;
+        GameContext* ctx = as->ctx;
+
+        if (ctx->caught_fish) {
+            ctx->caught_fish->state = RELEASED;
+            ctx->caught_fish = 0;
+        }
+    }
+
     return SDL_APP_CONTINUE;
 }
 
@@ -101,8 +111,8 @@ SDL_AppResult SDL_AppIterate(void* appstate) {
             /* This might seem very low but it's not */
             if (probability < 1) spawn_fish(current_fish);
         } else if (current_fish->state == CAUGHT) {
-            fish_rect.y = mouse_y + 15;
-            fish_rect.x = HOOK_X;
+            fish_rect.y = current_fish->y = mouse_y + 15;
+            fish_rect.x = current_fish->x = HOOK_X;
             draw_rect_around_x(as->renderer, &fish_rect);
         } else {
             move_fish(current_fish, delta);
@@ -110,9 +120,14 @@ SDL_AppResult SDL_AppIterate(void* appstate) {
             fish_rect.y = current_fish->y;
 
             SDL_RenderFillRect(as->renderer, &fish_rect);
-            if (as->ctx->line_state == EMPTY && SDL_HasRectIntersectionFloat(&rect, &fish_rect)) {
+            if (
+                    current_fish->state == ALIVE &&
+                    !as->ctx->caught_fish &&
+                    !as->ctx->is_line_cut &&
+                    SDL_HasRectIntersectionFloat(&rect, &fish_rect)
+            ) {
                 current_fish->state = CAUGHT;
-                as->ctx->line_state = USED;
+                as->ctx->caught_fish = current_fish;
             }
         }
     }

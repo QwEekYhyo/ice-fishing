@@ -7,6 +7,7 @@ typedef enum {
     DEAD,
     ALIVE,
     CAUGHT,
+    RELEASED,
 } FishState;
 
 typedef struct {
