@@ -71,6 +71,21 @@ SDL_AppResult SDL_AppIterate(void* appstate) {
     rect.y = WATER_Y;
     SDL_RenderFillRect(as->renderer, &rect);
 
+    /* Draw static player */
+    SDL_SetRenderDrawColor(as->renderer, 245, 0, 21, SDL_ALPHA_OPAQUE);
+    rect.w = 100;
+    rect.h = 150;
+    rect.x = WINDOW_WIDTH * 2.0 / 3.0;
+    rect.y = WATER_Y - 170.0;
+    SDL_RenderFillRect(as->renderer, &rect);
+    SDL_SetRenderDrawColor(as->renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
+    rect.w = 60;
+    rect.h = 90;
+    rect.x = WINDOW_WIDTH * 2.0 / 3.0 + 20;
+    rect.y = WATER_Y - 125.0;
+    SDL_RenderFillRect(as->renderer, &rect);
+
+    /* Draw fishes */
     Uint64 now           = SDL_GetTicks();
     Uint64 delta         = now - as->ctx->last_update;
     as->ctx->last_update = now;
