@@ -1,5 +1,5 @@
-#ifndef FISH_H
-#define FISH_H
+#ifndef ICE_FISHING_FISH_H
+#define ICE_FISHING_FISH_H
 
 #define MAX_FISHES 4
 

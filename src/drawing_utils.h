@@ -1,5 +1,5 @@
-#ifndef DRAWING_UTILS_H
-#define DRAWING_UTILS_H
+#ifndef ICE_FISHING_DRAWING_UTILS_H
+#define ICE_FISHING_DRAWING_UTILS_H
 
 #include <SDL3/SDL_rect.h>
 #include <SDL3/SDL_render.h>

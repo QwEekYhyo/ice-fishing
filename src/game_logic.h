@@ -1,5 +1,5 @@
-#ifndef GAME_LOGIC_H
-#define GAME_LOGIC_H
+#ifndef ICE_FISHING_GAME_LOGIC_H
+#define ICE_FISHING_GAME_LOGIC_H
 
 #include <fish/fish.h>
 
