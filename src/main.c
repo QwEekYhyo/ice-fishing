@@ -89,6 +89,7 @@ SDL_AppResult SDL_AppEvent(void* appstate, SDL_Event* event) {
 
 SDL_AppResult SDL_AppIterate(void* appstate) {
     AppState* as = (AppState*) appstate;
+    GameContext* ctx = as->ctx;
 
     /* Draw background */
     SDL_SetRenderDrawColor(as->renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
@@ -127,14 +128,14 @@ SDL_AppResult SDL_AppIterate(void* appstate) {
 
     /* Draw fishes */
     Uint64 now           = SDL_GetTicks();
-    Uint64 delta         = now - as->ctx->last_update;
-    as->ctx->last_update = now;
+    Uint64 delta         = now - ctx->last_update;
+    ctx->last_update = now;
     SDL_SetRenderDrawColor(as->renderer, 0, 0, 255, SDL_ALPHA_OPAQUE);
 
     SDL_FRect fish_rect;
     fish_rect.w = fish_rect.h = 50;
     for (int i = 0; i < MAX_FISHES; i++) {
-        Fish* current_fish = &as->ctx->fishes[i];
+        Fish* current_fish = &ctx->fishes[i];
         if (current_fish->state == DEAD) {
             Sint32 probability = SDL_rand(100);
             /* This might seem very low but it's not */
@@ -151,12 +152,12 @@ SDL_AppResult SDL_AppIterate(void* appstate) {
             SDL_RenderFillRect(as->renderer, &fish_rect);
             if (
                     current_fish->state == ALIVE &&
-                    !as->ctx->caught_fish &&
-                    !as->ctx->is_line_cut &&
+                    !ctx->caught_fish &&
+                    !ctx->is_line_cut &&
                     SDL_HasRectIntersectionFloat(&rect, &fish_rect)
             ) {
                 current_fish->state = CAUGHT;
-                as->ctx->caught_fish = current_fish;
+                ctx->caught_fish = current_fish;
             }
         }
     }
