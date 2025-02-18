@@ -30,11 +30,11 @@ static const SDL_Color color = {0, 0, 0, 255};
 static char text[100];
 
 void update_player_score(
-        SDL_Renderer* renderer,
-        TTF_Font* font,
-        SDL_Surface** surface,
-        SDL_Texture** texture,
-        unsigned long score
+    SDL_Renderer* renderer,
+    TTF_Font* font,
+    SDL_Surface** surface,
+    SDL_Texture** texture,
+    unsigned long score
 ) {
     SDL_snprintf(text, 100, "%lu Fish", score);
 

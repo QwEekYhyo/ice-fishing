@@ -75,7 +75,13 @@ SDL_AppResult SDL_AppEvent(void* appstate, SDL_Event* event) {
     if (event->type == SDL_EVENT_MOUSE_BUTTON_DOWN) {
         AppState* as = (AppState*) appstate;
         if (handle_mouse_click(as->ctx))
-            update_player_score(as->renderer, as->font, &as->score_surface, &as->score_texture, as->ctx->player_score);
+            update_player_score(
+                as->renderer,
+                as->font,
+                &as->score_surface,
+                &as->score_texture,
+                as->ctx->player_score
+            );
     }
 
     return SDL_APP_CONTINUE;
