@@ -67,6 +67,6 @@ void update_player_score(
     SDL_DestroySurface(*surface);
     SDL_DestroyTexture(*texture);
 
-    *surface = TTF_RenderText_Solid(font, text, 7, color);
+    *surface = TTF_RenderText_Solid(font, text, SDL_strlen(text), color);
     *texture = SDL_CreateTextureFromSurface(renderer, *surface);
 }
