@@ -77,12 +77,7 @@ SDL_AppResult SDL_AppEvent(void* appstate, SDL_Event* event) {
 
     if (event->type == SDL_EVENT_MOUSE_BUTTON_DOWN) {
         AppState* as = (AppState*) appstate;
-        GameContext* ctx = as->ctx;
-
-        if (ctx->caught_fish) {
-            ctx->caught_fish->state = RELEASED;
-            ctx->caught_fish = 0;
-        }
+        handle_mouse_click(as->ctx);
     }
 
     return SDL_APP_CONTINUE;

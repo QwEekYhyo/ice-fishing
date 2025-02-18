@@ -15,4 +15,6 @@ typedef struct {
 
 void init_game(GameContext* ctx);
 
+void handle_mouse_click(GameContext* context);
+
 #endif
