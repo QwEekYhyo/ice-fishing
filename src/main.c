@@ -11,6 +11,8 @@
 
 #include <SDL3_ttf/SDL_ttf.h>
 
+#include <SDL3_image/SDL_image.h>
+
 #include <common_defs.h>
 #include <drawing_utils.h>
 #include <fish/fish.h>
@@ -24,6 +26,8 @@ typedef struct {
     SDL_Texture* score_texture;
     GameContext* ctx;
 } AppState;
+
+static SDL_Texture* test;
 
 SDL_AppResult SDL_AppInit(void** appstate, int argc, char* argv[]) {
     SDL_SetAppMetadata("Ice Fishing", "0.1", "fr.puceaulytech.ice-fishing");
@@ -55,7 +59,7 @@ SDL_AppResult SDL_AppInit(void** appstate, int argc, char* argv[]) {
         return SDL_APP_FAILURE;
     }
 
-    as->font = TTF_OpenFont("../assets/comicrazy.ttf", 100);
+    as->font = TTF_OpenFont("../assets/comicrazy.ttf", 100); // TODO: better path resolution
     if (!as->font) {
         SDL_Log("Couldn't open font: %s", SDL_GetError());
         return SDL_APP_FAILURE;
@@ -65,6 +69,10 @@ SDL_AppResult SDL_AppInit(void** appstate, int argc, char* argv[]) {
 
     as->ctx = SDL_malloc(sizeof(GameContext));
     init_game(as->ctx);
+
+    SDL_Surface* test_surface = IMG_Load("../assets/fishingrod.png"); // TODO: better path resolution
+    test = SDL_CreateTextureFromSurface(as->renderer, test_surface);
+    SDL_DestroySurface(test_surface);
 
     return SDL_APP_CONTINUE;
 }
@@ -104,6 +112,10 @@ SDL_AppResult SDL_AppIterate(void* appstate) {
 
     /* Draw static player */
     draw_player(as->renderer);
+    rect.h = rect.w = 150;
+    rect.x = HOOK_X;
+    rect.y = WATER_Y - 200;
+    SDL_RenderTexture(as->renderer, test, 0, &rect);
 
     /* Draw hook */
     float mouse_y;
@@ -163,6 +175,7 @@ void SDL_AppQuit(void* appstate, SDL_AppResult result) {
     AppState* as = (AppState*) appstate;
     SDL_DestroySurface(as->score_surface);
     SDL_DestroyTexture(as->score_texture);
+    SDL_DestroyTexture(test);
     SDL_DestroyRenderer(as->renderer);
     SDL_DestroyWindow(as->window);
     TTF_CloseFont(as->font);
