@@ -12,14 +12,19 @@ void init_game(GameContext* ctx) {
     }
 }
 
-void handle_mouse_click(GameContext* ctx) {
+bool handle_mouse_click(GameContext* ctx) {
     Fish* fish = ctx->caught_fish;
+    bool score_increased = 0;
+
     if (fish) {
         if (fish->y < WATER_Y) {
             fish->state = DEAD;
             ctx->player_score += 1;
+            score_increased = 1;
         } else fish->state = RELEASED;
         
         ctx->caught_fish = 0;
     }
+
+    return score_increased;
 }

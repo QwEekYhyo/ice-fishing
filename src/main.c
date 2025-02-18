@@ -19,12 +19,11 @@
 typedef struct {
     SDL_Window* window;
     SDL_Renderer* renderer;
+    TTF_Font* font;
+    SDL_Surface* score_surface;
+    SDL_Texture* score_texture;
     GameContext* ctx;
 } AppState;
-
-static TTF_Font* font;
-static SDL_Surface* thing;
-static SDL_Texture* other_thingy;
 
 SDL_AppResult SDL_AppInit(void** appstate, int argc, char* argv[]) {
     SDL_SetAppMetadata("Ice Fishing", "0.1", "fr.puceaulytech.ice-fishing");
@@ -36,12 +35,6 @@ SDL_AppResult SDL_AppInit(void** appstate, int argc, char* argv[]) {
 
     if (!TTF_Init()) {
         SDL_Log("Couldn't initialize SDL_ttf: %s", SDL_GetError());
-        return SDL_APP_FAILURE;
-    }
-
-    font = TTF_OpenFont("../assets/comicrazy.ttf", 100);
-    if (!font) {
-        SDL_Log("Couldn't open font: %s", SDL_GetError());
         return SDL_APP_FAILURE;
     }
 
@@ -62,9 +55,13 @@ SDL_AppResult SDL_AppInit(void** appstate, int argc, char* argv[]) {
         return SDL_APP_FAILURE;
     }
 
-    SDL_Color color = {0, 0, 0, 255};
-    thing = TTF_RenderText_Solid(font, "35 Fish", 7, color);
-    other_thingy = SDL_CreateTextureFromSurface(as->renderer, thing);
+    as->font = TTF_OpenFont("../assets/comicrazy.ttf", 100);
+    if (!as->font) {
+        SDL_Log("Couldn't open font: %s", SDL_GetError());
+        return SDL_APP_FAILURE;
+    }
+
+    update_player_score(as->renderer, as->font, &as->score_surface, &as->score_texture, 0);
 
     as->ctx = SDL_malloc(sizeof(GameContext));
     init_game(as->ctx);
@@ -77,7 +74,8 @@ SDL_AppResult SDL_AppEvent(void* appstate, SDL_Event* event) {
 
     if (event->type == SDL_EVENT_MOUSE_BUTTON_DOWN) {
         AppState* as = (AppState*) appstate;
-        handle_mouse_click(as->ctx);
+        if (handle_mouse_click(as->ctx))
+            update_player_score(as->renderer, as->font, &as->score_surface, &as->score_texture, as->ctx->player_score);
     }
 
     return SDL_APP_CONTINUE;
@@ -106,7 +104,7 @@ SDL_AppResult SDL_AppIterate(void* appstate) {
     rect.y = 20;
     rect.w = 200;
     rect.h = 70;
-    SDL_RenderTexture(as->renderer, other_thingy, NULL, &rect);
+    SDL_RenderTexture(as->renderer, as->score_texture, NULL, &rect);
 
     /* Draw static player */
     draw_player(as->renderer);
@@ -167,12 +165,12 @@ void SDL_AppQuit(void* appstate, SDL_AppResult result) {
     if (appstate == NULL) return;
 
     AppState* as = (AppState*) appstate;
-    SDL_DestroySurface(thing);
-    SDL_DestroyTexture(other_thingy);
+    SDL_DestroySurface(as->score_surface);
+    SDL_DestroyTexture(as->score_texture);
     SDL_DestroyRenderer(as->renderer);
     SDL_DestroyWindow(as->window);
+    TTF_CloseFont(as->font);
     SDL_free(as->ctx);
-    TTF_CloseFont(font);
     SDL_free(as);
     TTF_Quit();
     SDL_Quit();
