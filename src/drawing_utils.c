@@ -11,6 +11,32 @@ void draw_rect_around_x(SDL_Renderer* renderer, SDL_FRect* rect) {
     rect->x += half;
 }
 
+void draw_background(SDL_Renderer* renderer, SDL_FRect* rect) {
+    /* All the screen white */
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
+    SDL_RenderClear(renderer);
+
+    /* Fill all screen but the sky with ice color */
+    SDL_SetRenderDrawColor(renderer, 75, 132, 211, SDL_ALPHA_OPAQUE);
+    rect->w = WINDOW_WIDTH;
+    rect->h = WINDOW_HEIGHT;
+    rect->y = WATER_Y - 20.0;
+    SDL_RenderFillRect(renderer, rect);
+
+    /* Then fill with water under the water line */
+    SDL_SetRenderDrawColor(renderer, 31, 58, 94, SDL_ALPHA_OPAQUE);
+    rect->y = WATER_Y;
+    SDL_RenderFillRect(renderer, rect);
+
+    /* Draw the hole in the ice */
+    SDL_SetRenderDrawColor(renderer, 48, 89, 145, SDL_ALPHA_OPAQUE);
+    rect->w = 100.0;
+    rect->h = 20.0;
+    rect->y = WATER_Y - 20.0;
+    rect->x = HOOK_X;
+    draw_rect_around_x(renderer, rect);
+}
+
 void draw_player(SDL_Renderer* renderer) {
     SDL_SetRenderDrawColor(renderer, 245, 0, 21, SDL_ALPHA_OPAQUE);
     SDL_FRect rect;

@@ -91,20 +91,9 @@ SDL_AppResult SDL_AppIterate(void* appstate) {
     AppState* as = (AppState*) appstate;
     GameContext* ctx = as->ctx;
 
-    /* Draw background */
-    SDL_SetRenderDrawColor(as->renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
-    SDL_RenderClear(as->renderer);
-
     SDL_FRect rect;
-    SDL_SetRenderDrawColor(as->renderer, 75, 132, 211, SDL_ALPHA_OPAQUE);
-    rect.w = WINDOW_WIDTH;
-    rect.h = WINDOW_HEIGHT;
-    rect.y = WATER_Y - 20.0;
-    SDL_RenderFillRect(as->renderer, &rect);
-
-    SDL_SetRenderDrawColor(as->renderer, 31, 58, 94, SDL_ALPHA_OPAQUE);
-    rect.y = WATER_Y;
-    SDL_RenderFillRect(as->renderer, &rect);
+    /* Draw background */
+    draw_background(as->renderer, &rect);
 
     /* Draw player score */
     rect.x = 40;

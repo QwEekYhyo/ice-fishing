@@ -11,6 +11,7 @@
 
 void draw_rect_around_x(SDL_Renderer* renderer, SDL_FRect* rect);
 
+void draw_background(SDL_Renderer* renderer, SDL_FRect* rect);
 void draw_player(SDL_Renderer* renderer);
 
 void update_player_score(

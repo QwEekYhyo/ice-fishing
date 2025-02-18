@@ -5,7 +5,7 @@
 #define WINDOW_HEIGHT 720
 
 #define WATER_Y WINDOW_HEIGHT / 3.0
-#define PLAYER_X WINDOW_WIDTH * 2.0 / 3.0 + 20
-#define HOOK_X PLAYER_X - 100
+#define PLAYER_X WINDOW_WIDTH * 3.0 / 4.0
+#define HOOK_X PLAYER_X - 180
 
 #endif
