@@ -4,8 +4,12 @@
 #include <SDL3/SDL_main.h>
 #include <SDL3/SDL_mouse.h>
 #include <SDL3/SDL_rect.h>
+#include <SDL3/SDL_render.h>
 #include <SDL3/SDL_stdinc.h>
+#include <SDL3/SDL_surface.h>
 #include <SDL3/SDL_timer.h>
+
+#include <SDL3_ttf/SDL_ttf.h>
 
 #include <common_defs.h>
 #include <drawing_utils.h>
@@ -18,11 +22,26 @@ typedef struct {
     GameContext* ctx;
 } AppState;
 
+static TTF_Font* font;
+static SDL_Surface* thing;
+static SDL_Texture* other_thingy;
+
 SDL_AppResult SDL_AppInit(void** appstate, int argc, char* argv[]) {
     SDL_SetAppMetadata("Ice Fishing", "0.1", "fr.puceaulytech.ice-fishing");
 
     if (!SDL_Init(SDL_INIT_VIDEO)) {
         SDL_Log("Couldn't initialize SDL: %s", SDL_GetError());
+        return SDL_APP_FAILURE;
+    }
+
+    if (!TTF_Init()) {
+        SDL_Log("Couldn't initialize SDL_ttf: %s", SDL_GetError());
+        return SDL_APP_FAILURE;
+    }
+
+    font = TTF_OpenFont("../assets/comicrazy.ttf", 100);
+    if (!font) {
+        SDL_Log("Couldn't open font: %s", SDL_GetError());
         return SDL_APP_FAILURE;
     }
 
@@ -42,6 +61,10 @@ SDL_AppResult SDL_AppInit(void** appstate, int argc, char* argv[]) {
         SDL_Log("Couldn't create window/renderer: %s", SDL_GetError());
         return SDL_APP_FAILURE;
     }
+
+    SDL_Color color = {0, 0, 0, 255};
+    thing = TTF_RenderText_Solid(font, "35 Fish", 7, color);
+    other_thingy = SDL_CreateTextureFromSurface(as->renderer, thing);
 
     as->ctx = SDL_malloc(sizeof(GameContext));
     init_game(as->ctx);
@@ -82,6 +105,13 @@ SDL_AppResult SDL_AppIterate(void* appstate) {
     SDL_SetRenderDrawColor(as->renderer, 31, 58, 94, SDL_ALPHA_OPAQUE);
     rect.y = WATER_Y;
     SDL_RenderFillRect(as->renderer, &rect);
+
+    /* Draw player score */
+    rect.x = 40;
+    rect.y = 20;
+    rect.w = 200;
+    rect.h = 70;
+    SDL_RenderTexture(as->renderer, other_thingy, NULL, &rect);
 
     /* Draw static player */
     draw_player(as->renderer);
@@ -142,8 +172,13 @@ void SDL_AppQuit(void* appstate, SDL_AppResult result) {
     if (appstate == NULL) return;
 
     AppState* as = (AppState*) appstate;
+    SDL_DestroySurface(thing);
+    SDL_DestroyTexture(other_thingy);
     SDL_DestroyRenderer(as->renderer);
     SDL_DestroyWindow(as->window);
     SDL_free(as->ctx);
+    TTF_CloseFont(font);
     SDL_free(as);
+    TTF_Quit();
+    SDL_Quit();
 }
