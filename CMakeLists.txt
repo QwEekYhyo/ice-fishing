@@ -25,3 +25,4 @@ target_link_libraries(ice-fishing PRIVATE
 )
 
 install(TARGETS ice-fishing)
+install(DIRECTORY assets DESTINATION share/games/ice-fishing)
