@@ -19,30 +19,27 @@ void spawn_fish(Fish* fish, const FishProperties* properties) {
     const float speed = (SDL_randf() * 2.0) - 1.0;
     if (speed == 0) return; // TODO: maybe something better?
 
-    fish->state = ALIVE;
-    fish->x     = speed > 0 ? -50 : WINDOW_WIDTH + 50;
-    fish->y     = SDL_rand(WINDOW_HEIGHT - WATER_Y - 70) + WATER_Y + 10;
-    fish->speed = speed;
+    fish->state      = ALIVE;
+    fish->x          = speed > 0 ? -50 : WINDOW_WIDTH + 50;
+    fish->y          = SDL_rand(WINDOW_HEIGHT - WATER_Y - 70) + WATER_Y + 10;
+    fish->speed      = speed;
     fish->properties = properties;
 }
 
-void move_linear(Fish *fish, unsigned long delta_time) {
+void move_linear(Fish* fish, unsigned long delta_time) {
     fish->x += delta_time * fish->speed;
 }
 
 // This is kinda trash
 void random_ups_downs(Fish* fish, unsigned long delta_time) {
     move_linear(fish, delta_time);
-    bool can_go_up = fish->y >= WATER_Y + 20;
+    bool can_go_up   = fish->y >= WATER_Y + 20;
     bool can_go_down = fish->y <= WINDOW_HEIGHT - 20 - 50;
 
     if (!can_go_down && !can_go_up) return;
 
     float delta_y = (SDL_randf() - 1) * delta_time * fish->speed;
-    if (can_go_down && can_go_up)
-        fish->y += delta_y;
-    else if (can_go_down)
-        fish->y += SDL_fabsf(delta_y);
-    else if (can_go_up)
-        fish->y -= SDL_fabsf(delta_y);
+    if (can_go_down && can_go_up) fish->y += delta_y;
+    else if (can_go_down) fish->y += SDL_fabsf(delta_y);
+    else if (can_go_up) fish->y -= SDL_fabsf(delta_y);
 }

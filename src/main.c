@@ -29,9 +29,9 @@ typedef struct {
 
 static SDL_Texture* test;
 
-static const FishProperties fish_properties[] = { 
-    {.color=0x0000FF, ._move=move_linear},
-    {.color=0x303030, ._move=random_ups_downs},
+static const FishProperties fish_properties[] = {
+    {.color = 0x0000FF, ._move = move_linear},
+    {.color = 0x303030, ._move = random_ups_downs},
 };
 
 SDL_AppResult SDL_AppInit(void** appstate, int argc, char* argv[]) {
@@ -149,14 +149,18 @@ SDL_AppResult SDL_AppIterate(void* appstate) {
         if (current_fish->state == DEAD) {
             Sint32 probability = SDL_rand(100);
             /* This might seem very low but it's not */
-            if (probability < 1) spawn_fish(current_fish, SDL_randf() > 0.3f ? &fish_properties[0] : &fish_properties[1]);
+            if (probability < 1)
+                spawn_fish(
+                    current_fish,
+                    SDL_randf() > 0.3f ? &fish_properties[0] : &fish_properties[1]
+                );
         } else {
             SDL_SetRenderDrawColor(
-                    as->renderer,
-                    (current_fish->properties->color >> 16) & 0xFF,
-                    (current_fish->properties->color >> 8) & 0xFF,
-                    current_fish->properties->color & 0xFF,
-                    SDL_ALPHA_OPAQUE
+                as->renderer,
+                (current_fish->properties->color >> 16) & 0xFF,
+                (current_fish->properties->color >> 8) & 0xFF,
+                current_fish->properties->color & 0xFF,
+                SDL_ALPHA_OPAQUE
             );
             if (current_fish->state == CAUGHT) {
                 fish_rect.y = current_fish->y = mouse_y + 15;
