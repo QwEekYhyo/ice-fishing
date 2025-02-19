@@ -23,3 +23,5 @@ target_link_libraries(ice-fishing PRIVATE
     SDL3_image::SDL3_image
     SDL3::SDL3
 )
+
+install(TARGETS ice-fishing)
