@@ -70,6 +70,8 @@ SDL_AppResult SDL_AppInit(void** appstate, int argc, char* argv[]) {
         return SDL_APP_FAILURE;
     }
 
+    as->score_surface = NULL;
+    as->score_texture = NULL;
     update_player_score(as->renderer, as->font, &as->score_surface, &as->score_texture, 0);
 
     as->ctx = SDL_malloc(sizeof(GameContext));
