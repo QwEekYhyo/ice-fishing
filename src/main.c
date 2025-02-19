@@ -117,13 +117,15 @@ SDL_AppResult SDL_AppIterate(void* appstate) {
     rect.y = WATER_Y - 200;
     SDL_RenderTexture(as->renderer, test, 0, &rect);
 
-    /* Draw hook */
+    /* Draw fishing line and hook */
     float mouse_y;
     SDL_GetMouseState(NULL, &mouse_y);
+    SDL_SetRenderDrawColor(as->renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
+    SDL_RenderLine(as->renderer, HOOK_X, rect.y, HOOK_X, mouse_y);
     rect.w = rect.h = 24;
 
-    rect.y = mouse_y;
     rect.x = HOOK_X;
+    rect.y = mouse_y;
     SDL_SetRenderDrawColor(as->renderer, 246, 250, 1, SDL_ALPHA_OPAQUE);
     draw_rect_around_x(as->renderer, &rect);
 
