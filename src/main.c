@@ -70,7 +70,8 @@ SDL_AppResult SDL_AppInit(void** appstate, int argc, char* argv[]) {
     as->ctx = SDL_malloc(sizeof(GameContext));
     init_game(as->ctx);
 
-    SDL_Surface* test_surface = IMG_Load("../assets/fishingrod.png"); // TODO: better path resolution
+    SDL_Surface* test_surface =
+        IMG_Load("../assets/fishingrod.png"); // TODO: better path resolution
     test = SDL_CreateTextureFromSurface(as->renderer, test_surface);
     SDL_DestroySurface(test_surface);
 
@@ -96,7 +97,7 @@ SDL_AppResult SDL_AppEvent(void* appstate, SDL_Event* event) {
 }
 
 SDL_AppResult SDL_AppIterate(void* appstate) {
-    AppState* as = (AppState*) appstate;
+    AppState* as     = (AppState*) appstate;
     GameContext* ctx = as->ctx;
 
     SDL_FRect rect;
@@ -113,6 +114,7 @@ SDL_AppResult SDL_AppIterate(void* appstate) {
     /* Draw static player */
     draw_player(as->renderer);
     rect.h = rect.w = 150;
+
     rect.x = HOOK_X;
     rect.y = WATER_Y - 200;
     SDL_RenderTexture(as->renderer, test, 0, &rect);
@@ -130,8 +132,8 @@ SDL_AppResult SDL_AppIterate(void* appstate) {
     draw_rect_around_x(as->renderer, &rect);
 
     /* Draw fishes */
-    Uint64 now           = SDL_GetTicks();
-    Uint64 delta         = now - ctx->last_update;
+    Uint64 now       = SDL_GetTicks();
+    Uint64 delta     = now - ctx->last_update;
     ctx->last_update = now;
     SDL_SetRenderDrawColor(as->renderer, 0, 0, 255, SDL_ALPHA_OPAQUE);
 
