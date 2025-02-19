@@ -29,6 +29,11 @@ typedef struct {
 
 static SDL_Texture* test;
 
+static const FishProperties fish_properties[] = { 
+    {.color=0x0000FF, ._move=move_linear},
+    {.color=0x303030, ._move=random_ups_downs},
+};
+
 SDL_AppResult SDL_AppInit(void** appstate, int argc, char* argv[]) {
     SDL_SetAppMetadata("Ice Fishing", "0.1", "fr.puceaulytech.ice-fishing");
 
@@ -135,7 +140,6 @@ SDL_AppResult SDL_AppIterate(void* appstate) {
     Uint64 now       = SDL_GetTicks();
     Uint64 delta     = now - ctx->last_update;
     ctx->last_update = now;
-    SDL_SetRenderDrawColor(as->renderer, 0, 0, 255, SDL_ALPHA_OPAQUE);
 
     SDL_FRect fish_rect;
     fish_rect.w = fish_rect.h = 50;
@@ -144,25 +148,34 @@ SDL_AppResult SDL_AppIterate(void* appstate) {
         if (current_fish->state == DEAD) {
             Sint32 probability = SDL_rand(100);
             /* This might seem very low but it's not */
-            if (probability < 1) spawn_fish(current_fish);
-        } else if (current_fish->state == CAUGHT) {
-            fish_rect.y = current_fish->y = mouse_y + 15;
-            fish_rect.x = current_fish->x = HOOK_X;
-            draw_rect_around_x(as->renderer, &fish_rect);
+            if (probability < 1) spawn_fish(current_fish, SDL_randf() > 0.3f ? &fish_properties[0] : &fish_properties[1]);
         } else {
-            move_fish(current_fish, delta);
-            fish_rect.x = current_fish->x;
-            fish_rect.y = current_fish->y;
+            SDL_SetRenderDrawColor(
+                    as->renderer,
+                    (current_fish->properties->color >> 16) & 0xFF,
+                    (current_fish->properties->color >> 8) & 0xFF,
+                    current_fish->properties->color & 0xFF,
+                    SDL_ALPHA_OPAQUE
+            );
+            if (current_fish->state == CAUGHT) {
+                fish_rect.y = current_fish->y = mouse_y + 15;
+                fish_rect.x = current_fish->x = HOOK_X;
+                draw_rect_around_x(as->renderer, &fish_rect);
+            } else {
+                move_fish(current_fish, delta);
+                fish_rect.x = current_fish->x;
+                fish_rect.y = current_fish->y;
 
-            SDL_RenderFillRect(as->renderer, &fish_rect);
-            if (
-                    current_fish->state == ALIVE &&
-                    !ctx->caught_fish &&
-                    !ctx->is_line_cut &&
-                    SDL_HasRectIntersectionFloat(&rect, &fish_rect)
-            ) {
-                current_fish->state = CAUGHT;
-                ctx->caught_fish = current_fish;
+                SDL_RenderFillRect(as->renderer, &fish_rect);
+                if (
+                        current_fish->state == ALIVE &&
+                        !ctx->caught_fish &&
+                        !ctx->is_line_cut &&
+                        SDL_HasRectIntersectionFloat(&rect, &fish_rect)
+                ) {
+                    current_fish->state = CAUGHT;
+                    ctx->caught_fish = current_fish;
+                }
             }
         }
     }
