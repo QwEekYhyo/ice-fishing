@@ -6,7 +6,7 @@
 #include <fish/fish.h>
 
 typedef struct {
-    Fish fishes[MAX_FISHES];
+    Fish* fishes[MAX_FISHES];
     unsigned long last_update;
     unsigned long player_score;
     bool is_line_cut;

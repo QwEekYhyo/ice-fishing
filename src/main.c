@@ -29,11 +29,6 @@ typedef struct {
 
 static SDL_Texture* test;
 
-static const FishProperties fish_properties[] = {
-    {.color = 0x0000FF, ._move = move_linear},
-    {.color = 0x303030, ._move = random_ups_downs},
-};
-
 SDL_AppResult SDL_AppInit(void** appstate, int argc, char* argv[]) {
     SDL_SetAppMetadata("Ice Fishing", "0.1", "fr.puceaulytech.ice-fishing");
 
@@ -147,21 +142,18 @@ SDL_AppResult SDL_AppIterate(void* appstate) {
     SDL_FRect fish_rect;
     fish_rect.w = fish_rect.h = 50;
     for (int i = 0; i < MAX_FISHES; i++) {
-        Fish* current_fish = &ctx->fishes[i];
+        Fish* current_fish = ctx->fishes[i];
         if (current_fish->state == DEAD) {
             Sint32 probability = SDL_rand(100);
             /* This might seem very low but it's not */
             if (probability < 1)
-                spawn_fish(
-                    current_fish,
-                    SDL_randf() > 0.3f ? &fish_properties[0] : &fish_properties[1]
-                );
+                spawn_fish(&ctx->fishes[i]);
         } else {
             SDL_SetRenderDrawColor(
                 as->renderer,
-                (current_fish->properties->color >> 16) & 0xFF,
-                (current_fish->properties->color >> 8) & 0xFF,
-                current_fish->properties->color & 0xFF,
+                (current_fish->color >> 16) & 0xFF,
+                (current_fish->color >> 8) & 0xFF,
+                current_fish->color & 0xFF,
                 SDL_ALPHA_OPAQUE
             );
             if (current_fish->state == CAUGHT) {
@@ -203,6 +195,10 @@ void SDL_AppQuit(void* appstate, SDL_AppResult result) {
     SDL_DestroyRenderer(as->renderer);
     SDL_DestroyWindow(as->window);
     TTF_CloseFont(as->font);
+
+    for (int i = 0; i < MAX_FISHES; i++)
+        SDL_free(as->ctx->fishes[i]);
+
     SDL_free(as->ctx);
     SDL_free(as);
     TTF_Quit();

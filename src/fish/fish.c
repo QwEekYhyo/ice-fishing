@@ -2,11 +2,13 @@
 
 #include <common_defs.h>
 #include <fish/fish.h>
+#include <fish/normal_fish.h>
+#include <fish/updown_fish.h>
 
 // TODO: maybe use a macro for fish size (50) instead of hardcoding it everywhere
 
 void move_fish(Fish* fish, unsigned long delta_time) {
-    fish->properties->_move(fish, delta_time);
+    fish->move(fish, delta_time);
 
     if (
         fish->speed > 0 && fish->x >= WINDOW_WIDTH ||
@@ -15,31 +17,38 @@ void move_fish(Fish* fish, unsigned long delta_time) {
         fish->state = DEAD;
 }
 
-void spawn_fish(Fish* fish, const FishProperties* properties) {
+void spawn_fish(Fish** fish) {
     const float speed = (SDL_randf() * 2.0) - 1.0;
     if (speed == 0) return; // TODO: maybe something better?
 
-    fish->state      = ALIVE;
-    fish->x          = speed > 0 ? -50 : WINDOW_WIDTH + 50;
-    fish->y          = SDL_rand(WINDOW_HEIGHT - WATER_Y - 70) + WATER_Y + 10;
-    fish->speed      = speed;
-    fish->properties = properties;
-}
+    static const Uint8 FISH_TYPE_NUMBER = 2;
+    const Uint8 random_fish_type = SDL_rand(FISH_TYPE_NUMBER);
 
-void move_linear(Fish* fish, unsigned long delta_time) {
-    fish->x += delta_time * fish->speed;
-}
+    // TODO: different probabilities for each type of fish
+    size_t size;
+    switch (random_fish_type) {
+        default: return;
+        case 0:
+            size = sizeof(NormalFish);
+            break;
+        case 1:
+            size = sizeof(UpDownFish);
+            break;
+    }
+    (*fish) = SDL_realloc(*fish, size);
 
-// This is kinda trash
-void random_ups_downs(Fish* fish, unsigned long delta_time) {
-    move_linear(fish, delta_time);
-    bool can_go_up   = fish->y >= WATER_Y + 20;
-    bool can_go_down = fish->y <= WINDOW_HEIGHT - 20 - 50;
+    (*fish)->state = ALIVE;
+    (*fish)->x     = speed > 0 ? -50 : WINDOW_WIDTH + 50;
+    (*fish)->y     = SDL_rand(WINDOW_HEIGHT - WATER_Y - 70) + WATER_Y + 10;
+    (*fish)->speed = speed;
 
-    if (!can_go_down && !can_go_up) return;
-
-    float delta_y = (SDL_randf() - 1) * delta_time * fish->speed;
-    if (can_go_down && can_go_up) fish->y += delta_y;
-    else if (can_go_down) fish->y += SDL_fabsf(delta_y);
-    else if (can_go_up) fish->y -= SDL_fabsf(delta_y);
+    switch (random_fish_type) {
+        default: return;
+        case 0:
+            normal_fish_new(*fish);
+            break;
+        case 1:
+            up_down_fish_new(*fish);
+            break;
+    }
 }
