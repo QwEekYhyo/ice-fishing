@@ -135,48 +135,7 @@ SDL_AppResult SDL_AppIterate(void* appstate) {
     draw_rect_around_x(as->renderer, &rect);
 
     /* Draw fishes */
-    Uint64 now       = SDL_GetTicks();
-    Uint64 delta     = now - ctx->last_update;
-    ctx->last_update = now;
-
-    SDL_FRect fish_rect;
-    fish_rect.w = fish_rect.h = FISH_SIZE;
-    for (int i = 0; i < MAX_FISHES; i++) {
-        Fish* current_fish = ctx->fishes[i];
-        if (current_fish->state == DEAD) {
-            Sint32 probability = SDL_rand(100);
-            /* This might seem very low but it's not */
-            if (probability < 1) spawn_fish(&ctx->fishes[i]);
-        } else {
-            SDL_SetRenderDrawColor(
-                as->renderer,
-                (current_fish->color >> 16) & 0xFF,
-                (current_fish->color >> 8) & 0xFF,
-                current_fish->color & 0xFF,
-                SDL_ALPHA_OPAQUE
-            );
-            if (current_fish->state == CAUGHT) {
-                fish_rect.y = current_fish->y = mouse_y + 15;
-                fish_rect.x = current_fish->x = HOOK_X;
-                draw_rect_around_x(as->renderer, &fish_rect);
-            } else {
-                move_fish(current_fish, delta);
-                fish_rect.x = current_fish->x;
-                fish_rect.y = current_fish->y;
-
-                SDL_RenderFillRect(as->renderer, &fish_rect);
-                if (
-                        current_fish->state == ALIVE &&
-                        !ctx->caught_fish &&
-                        !ctx->is_line_cut &&
-                        SDL_HasRectIntersectionFloat(&rect, &fish_rect)
-                ) {
-                    current_fish->state = CAUGHT;
-                    ctx->caught_fish    = current_fish;
-                }
-            }
-        }
-    }
+    draw_all_fishes(as->renderer, ctx, &rect);
 
     SDL_RenderPresent(as->renderer);
 

@@ -8,6 +8,7 @@
 #include <SDL3_ttf/SDL_ttf.h>
 
 #include <common_defs.h>
+#include <game_logic.h>
 
 void draw_rect_around_x(SDL_Renderer* renderer, SDL_FRect* rect);
 
@@ -21,5 +22,7 @@ void update_player_score(
     SDL_Texture** texture,
     unsigned long score
 );
+
+void draw_all_fishes(SDL_Renderer* renderer, GameContext* ctx, const SDL_FRect* hook_rect);
 
 #endif

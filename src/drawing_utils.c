@@ -1,8 +1,10 @@
+#include <SDL3/SDL_rect.h>
 #include <SDL3/SDL_render.h>
 #include <SDL3/SDL_stdinc.h>
 #include <SDL3/SDL_surface.h>
 
 #include <drawing_utils.h>
+#include <fish/fish.h>
 
 void draw_rect_around_x(SDL_Renderer* renderer, SDL_FRect* rect) {
     const float half = rect->w / 2.0;
@@ -70,4 +72,49 @@ void update_player_score(
 
     *surface = TTF_RenderText_Solid(font, text, SDL_strlen(text), color);
     *texture = SDL_CreateTextureFromSurface(renderer, *surface);
+}
+
+void draw_all_fishes(SDL_Renderer* renderer, GameContext* ctx, const SDL_FRect* hook_rect) {
+    Uint64 now       = SDL_GetTicks();
+    Uint64 delta     = now - ctx->last_update;
+    ctx->last_update = now;
+
+    SDL_FRect fish_rect;
+    fish_rect.w = fish_rect.h = FISH_SIZE;
+    for (int i = 0; i < MAX_FISHES; i++) {
+        Fish* current_fish = ctx->fishes[i];
+        if (current_fish->state == DEAD) {
+            Sint32 probability = SDL_rand(100);
+            /* This might seem very low but it's not */
+            if (probability < 1) spawn_fish(&ctx->fishes[i]);
+        } else {
+            SDL_SetRenderDrawColor(
+                renderer,
+                (current_fish->color >> 16) & 0xFF,
+                (current_fish->color >> 8) & 0xFF,
+                current_fish->color & 0xFF,
+                SDL_ALPHA_OPAQUE
+            );
+            if (current_fish->state == CAUGHT) {
+                fish_rect.y = current_fish->y = hook_rect->y + 15;
+                fish_rect.x = current_fish->x = HOOK_X;
+                draw_rect_around_x(renderer, &fish_rect);
+            } else {
+                move_fish(current_fish, delta);
+                fish_rect.x = current_fish->x;
+                fish_rect.y = current_fish->y;
+
+                SDL_RenderFillRect(renderer, &fish_rect);
+                if (
+                        current_fish->state == ALIVE &&
+                        !ctx->caught_fish &&
+                        !ctx->is_line_cut &&
+                        SDL_HasRectIntersectionFloat(hook_rect, &fish_rect)
+                ) {
+                    current_fish->state = CAUGHT;
+                    ctx->caught_fish    = current_fish;
+                }
+            }
+        }
+    }
 }
