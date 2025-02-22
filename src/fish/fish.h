@@ -5,6 +5,7 @@
 
 // Maybe I'll make this dynamic at some point
 #define MAX_FISHES 4
+#define FISH_SIZE 50.0
 
 typedef enum {
     DEAD,

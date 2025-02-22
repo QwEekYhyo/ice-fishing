@@ -5,14 +5,13 @@
 #include <fish/normal_fish.h>
 #include <fish/updown_fish.h>
 
-// TODO: maybe use a macro for fish size (50) instead of hardcoding it everywhere
 
 void move_fish(Fish* fish, unsigned long delta_time) {
     fish->move(fish, delta_time);
 
     if (
-        fish->speed > 0 && fish->x >= WINDOW_WIDTH ||
-        fish->speed < 0 && fish->x <= -50
+        (fish->speed > 0 && fish->x >= WINDOW_WIDTH) ||
+        (fish->speed < 0 && fish->x <= -FISH_SIZE)
     )
         fish->state = DEAD;
 }
@@ -22,33 +21,35 @@ void spawn_fish(Fish** fish) {
     if (speed == 0) return; // TODO: maybe something better?
 
     static const Uint8 FISH_TYPE_NUMBER = 2;
-    const Uint8 random_fish_type = SDL_rand(FISH_TYPE_NUMBER);
+    const Uint8 random_fish_type        = SDL_rand(FISH_TYPE_NUMBER);
 
     // TODO: different probabilities for each type of fish
     size_t size;
     switch (random_fish_type) {
-        default: return;
-        case 0:
-            size = sizeof(NormalFish);
-            break;
-        case 1:
-            size = sizeof(UpDownFish);
-            break;
+    default:
+        return;
+    case 0:
+        size = sizeof(NormalFish);
+        break;
+    case 1:
+        size = sizeof(UpDownFish);
+        break;
     }
     (*fish) = SDL_realloc(*fish, size);
 
     (*fish)->state = ALIVE;
-    (*fish)->x     = speed > 0 ? -50 : WINDOW_WIDTH + 50;
+    (*fish)->x     = speed > 0 ? -FISH_SIZE : WINDOW_WIDTH + FISH_SIZE;
     (*fish)->y     = SDL_rand(WINDOW_HEIGHT - WATER_Y - 70) + WATER_Y + 10;
     (*fish)->speed = speed;
 
     switch (random_fish_type) {
-        default: return;
-        case 0:
-            normal_fish_new(*fish);
-            break;
-        case 1:
-            up_down_fish_new(*fish);
-            break;
+    default:
+        return;
+    case 0:
+        normal_fish_new(*fish);
+        break;
+    case 1:
+        up_down_fish_new(*fish);
+        break;
     }
 }

@@ -140,14 +140,13 @@ SDL_AppResult SDL_AppIterate(void* appstate) {
     ctx->last_update = now;
 
     SDL_FRect fish_rect;
-    fish_rect.w = fish_rect.h = 50;
+    fish_rect.w = fish_rect.h = FISH_SIZE;
     for (int i = 0; i < MAX_FISHES; i++) {
         Fish* current_fish = ctx->fishes[i];
         if (current_fish->state == DEAD) {
             Sint32 probability = SDL_rand(100);
             /* This might seem very low but it's not */
-            if (probability < 1)
-                spawn_fish(&ctx->fishes[i]);
+            if (probability < 1) spawn_fish(&ctx->fishes[i]);
         } else {
             SDL_SetRenderDrawColor(
                 as->renderer,
@@ -173,7 +172,7 @@ SDL_AppResult SDL_AppIterate(void* appstate) {
                         SDL_HasRectIntersectionFloat(&rect, &fish_rect)
                 ) {
                     current_fish->state = CAUGHT;
-                    ctx->caught_fish = current_fish;
+                    ctx->caught_fish    = current_fish;
                 }
             }
         }

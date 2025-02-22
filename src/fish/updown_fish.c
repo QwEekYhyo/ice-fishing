@@ -19,15 +19,15 @@ void up_down_fish_move(Fish* fish, unsigned long delta_time) {
             self->base.y -= delta_time * SDL_fabsf(self->base.speed) * 0.5;
     } else {
         self->no_direction_changes = 0;
-        self->current_direction = SDL_rand(3) - 1;
+        self->current_direction    = SDL_rand(3) - 1;
         up_down_fish_move(fish, delta_time);
     }
 }
 
 void up_down_fish_new(Fish* fish) {
     UpDownFish* self = (UpDownFish*) fish;
-    
-    self->base.color = COLOR;
-    self->base.move = up_down_fish_move;
+
+    self->base.color           = COLOR;
+    self->base.move            = up_down_fish_move;
     self->no_direction_changes = 50;
 }

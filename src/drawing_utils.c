@@ -20,6 +20,7 @@ void draw_background(SDL_Renderer* renderer, SDL_FRect* rect) {
     SDL_SetRenderDrawColor(renderer, 75, 132, 211, SDL_ALPHA_OPAQUE);
     rect->w = WINDOW_WIDTH;
     rect->h = WINDOW_HEIGHT;
+    rect->x = 0;
     rect->y = WATER_Y - 20.0;
     SDL_RenderFillRect(renderer, rect);
 
@@ -64,10 +65,8 @@ void update_player_score(
 ) {
     SDL_snprintf(text, 100, "%lu Fish", score);
 
-    if (*surface)
-        SDL_DestroySurface(*surface);
-    if (*texture)
-        SDL_DestroyTexture(*texture);
+    if (*surface) SDL_DestroySurface(*surface);
+    if (*texture) SDL_DestroyTexture(*texture);
 
     *surface = TTF_RenderText_Solid(font, text, SDL_strlen(text), color);
     *texture = SDL_CreateTextureFromSurface(renderer, *surface);
