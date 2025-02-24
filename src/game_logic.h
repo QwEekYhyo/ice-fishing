@@ -4,9 +4,11 @@
 #include <stdbool.h>
 
 #include <fish/fish.h>
+#include <obstacle/obstacle.h>
 
 typedef struct {
     Fish* fishes[MAX_FISHES];
+    Obstacle* obstacles[MAX_OBSTACLES];
     unsigned long last_update;
     unsigned long player_score;
     bool is_line_cut;

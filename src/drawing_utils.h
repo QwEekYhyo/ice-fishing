@@ -24,5 +24,6 @@ void update_player_score(
 );
 
 void draw_all_fishes(SDL_Renderer* renderer, GameContext* ctx, const SDL_FRect* hook_rect);
+void draw_all_obstacles(SDL_Renderer* renderer, GameContext* ctx, const SDL_FRect* hook_rect);
 
 #endif

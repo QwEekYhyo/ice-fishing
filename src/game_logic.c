@@ -3,6 +3,7 @@
 #include <common_defs.h>
 #include <fish/fish.h>
 #include <game_logic.h>
+#include <obstacle/obstacle.h>
 
 void init_game(GameContext* ctx) {
     ctx->player_score = ctx->is_line_cut = ctx->caught_fish = 0;
@@ -10,6 +11,11 @@ void init_game(GameContext* ctx) {
     for (unsigned int i = 0; i < MAX_FISHES; i++) {
         ctx->fishes[i]        = SDL_malloc(sizeof(Fish));
         ctx->fishes[i]->state = DEAD;
+    }
+
+    for (unsigned int i = 0; i < MAX_OBSTACLES; i++) {
+        ctx->obstacles[i]        = SDL_malloc(sizeof(Obstacle));
+        ctx->obstacles[i]->alive = 0;
     }
 }
 

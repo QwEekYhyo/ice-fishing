@@ -17,6 +17,7 @@
 #include <drawing_utils.h>
 #include <fish/fish.h>
 #include <game_logic.h>
+#include <obstacle/obstacle.h>
 
 typedef struct {
     SDL_Window* window;
@@ -137,7 +138,11 @@ SDL_AppResult SDL_AppIterate(void* appstate) {
     /* Draw fishes */
     draw_all_fishes(as->renderer, ctx, &rect);
 
+    /* Draw obstacles */
+    draw_all_obstacles(as->renderer, ctx, &rect);
+
     SDL_RenderPresent(as->renderer);
+    ctx->last_update = SDL_GetTicks();
 
     SDL_Delay(20);
     return SDL_APP_CONTINUE;
@@ -156,6 +161,9 @@ void SDL_AppQuit(void* appstate, SDL_AppResult result) {
 
     for (int i = 0; i < MAX_FISHES; i++)
         SDL_free(as->ctx->fishes[i]);
+
+    for (int i = 0; i < MAX_OBSTACLES; i++)
+        SDL_free(as->ctx->obstacles[i]);
 
     SDL_free(as->ctx);
     SDL_free(as);
