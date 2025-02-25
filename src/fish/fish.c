@@ -15,7 +15,7 @@ void move_fish(Fish* fish, unsigned long delta_time) {
 
     if (
         (fish->speed > 0 && fish->x >= WINDOW_WIDTH) ||
-        (fish->speed < 0 && fish->x <= -FISH_WIDTH)
+        (fish->speed < 0 && fish->x <= -fish->w)
     )
         fish->state = DEAD;
 }
@@ -41,11 +41,6 @@ Fish* spawn_fish(Fish* fish) {
     }
     fish = SDL_realloc(fish, size);
 
-    fish->state = ALIVE;
-    fish->x     = speed > 0 ? -FISH_WIDTH : WINDOW_WIDTH + FISH_WIDTH;
-    fish->y     = SDL_rand(WINDOW_HEIGHT - WATER_Y - 70) + WATER_Y + 10;
-    fish->speed = speed;
-
     switch (random_fish_type) {
     case 0:
         normal_fish_new(fish);
@@ -54,6 +49,11 @@ Fish* spawn_fish(Fish* fish) {
         up_down_fish_new(fish);
         break;
     }
+
+    fish->state = ALIVE;
+    fish->x     = speed > 0 ? -fish->w : WINDOW_WIDTH + fish->w;
+    fish->y     = SDL_rand(WINDOW_HEIGHT - WATER_Y - 70) + WATER_Y + 10;
+    fish->speed = speed;
 
     return fish;
 }

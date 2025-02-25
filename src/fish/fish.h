@@ -6,8 +6,6 @@
 
 // Maybe I'll make this dynamic at some point
 #define MAX_FISHES 4
-#define FISH_WIDTH 150.0f
-#define FISH_HEIGHT 50.0f
 
 typedef enum {
     DEAD,
@@ -17,7 +15,7 @@ typedef enum {
 } FishState;
 
 typedef struct Fish {
-    float x, y;
+    float x, y, w, h;
     float speed;
     SDL_Texture* texture;
     FishState state;

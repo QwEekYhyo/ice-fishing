@@ -80,8 +80,6 @@ void draw_all_fishes(SDL_Renderer* renderer, GameContext* ctx, const SDL_FRect* 
     Uint64 delta = now - ctx->last_update;
 
     SDL_FRect fish_rect;
-    fish_rect.w = FISH_WIDTH;
-    fish_rect.h = FISH_HEIGHT;
     for (int i = 0; i < MAX_FISHES; i++) {
         Fish* current_fish = ctx->fishes[i];
         if (current_fish->state == DEAD) {
@@ -89,6 +87,8 @@ void draw_all_fishes(SDL_Renderer* renderer, GameContext* ctx, const SDL_FRect* 
             /* This might seem very low but it's not */
             if (probability < 1) ctx->fishes[i] = spawn_fish(current_fish);
         } else {
+            fish_rect.w = current_fish->w;
+            fish_rect.h = current_fish->h;
             if (current_fish->state == CAUGHT) {
                 fish_rect.y = current_fish->y = hook_rect->y + 15;
                 fish_rect.x = current_fish->x = HOOK_X;
