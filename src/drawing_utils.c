@@ -76,8 +76,8 @@ void update_player_score(
 }
 
 void draw_all_fishes(SDL_Renderer* renderer, GameContext* ctx, const SDL_FRect* hook_rect) {
-    Uint64 now       = SDL_GetTicks();
-    Uint64 delta     = now - ctx->last_update;
+    Uint64 now   = SDL_GetTicks();
+    Uint64 delta = now - ctx->last_update;
 
     SDL_FRect fish_rect;
     fish_rect.w = fish_rect.h = FISH_SIZE;
@@ -86,7 +86,7 @@ void draw_all_fishes(SDL_Renderer* renderer, GameContext* ctx, const SDL_FRect* 
         if (current_fish->state == DEAD) {
             Sint32 probability = SDL_rand(100);
             /* This might seem very low but it's not */
-            if (probability < 1) spawn_fish(&ctx->fishes[i]);
+            if (probability < 1) ctx->fishes[i] = spawn_fish(current_fish);
         } else {
             SDL_SetRenderDrawColor(
                 renderer,
@@ -120,8 +120,8 @@ void draw_all_fishes(SDL_Renderer* renderer, GameContext* ctx, const SDL_FRect* 
 }
 
 void draw_all_obstacles(SDL_Renderer* renderer, GameContext* ctx, const SDL_FRect* hook_rect) {
-    Uint64 now       = SDL_GetTicks();
-    Uint64 delta     = now - ctx->last_update;
+    Uint64 now   = SDL_GetTicks();
+    Uint64 delta = now - ctx->last_update;
 
     SDL_FRect obstacle_rect;
     obstacle_rect.w = obstacle_rect.h = OBSTACLE_SIZE;
@@ -129,7 +129,7 @@ void draw_all_obstacles(SDL_Renderer* renderer, GameContext* ctx, const SDL_FRec
         Obstacle* current_obstacle = ctx->obstacles[i];
         if (current_obstacle->alive == 0) {
             Sint32 probability = SDL_rand(150);
-            if (probability < 1) spawn_obstacle(&ctx->obstacles[i]);
+            if (probability < 1) ctx->obstacles[i] = spawn_obstacle(current_obstacle);
         } else {
             SDL_SetRenderDrawColor(
                 renderer,

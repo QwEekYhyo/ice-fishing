@@ -23,6 +23,6 @@ typedef struct Fish {
 } Fish;
 
 void move_fish(Fish* fish, unsigned long delta_time);
-void spawn_fish(Fish** fish);
+Fish* spawn_fish(Fish* fish);
 
 #endif

@@ -19,7 +19,7 @@ void barrel_action(void* context) {
 void barrel_new(Obstacle* obstacle) {
     Barrel* self = (Barrel*) obstacle;
 
-    self->base.color = COLOR;
-    self->base.move  = barrel_move;
+    self->base.color          = COLOR;
+    self->base.move           = barrel_move;
     self->base.perform_action = barrel_action;
 }

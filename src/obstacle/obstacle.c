@@ -14,9 +14,9 @@ void move_obstacle(Obstacle* obstacle, unsigned long delta_time) {
         obstacle->alive = 0;
 }
 
-void spawn_obstacle(Obstacle** obstacle) {
+Obstacle* spawn_obstacle(Obstacle* obstacle) {
     const float speed = (SDL_randf() * 0.3) + 0.1;
-    if (speed == 0) return; // TODO: maybe something better?
+    if (speed == 0) return obstacle; // TODO: maybe something better?
 
     static const Uint8 OBSTACLE_TYPE_NUMBER = 1;
     const Uint8 random_obstacle_type        = SDL_rand(OBSTACLE_TYPE_NUMBER);
@@ -25,23 +25,23 @@ void spawn_obstacle(Obstacle** obstacle) {
     size_t size;
     switch (random_obstacle_type) {
     default:
-        return;
+        return obstacle;
     case 0:
         size = sizeof(Barrel);
         break;
     }
-    (*obstacle) = SDL_realloc(*obstacle, size);
+    obstacle = SDL_realloc(obstacle, size);
 
-    (*obstacle)->alive = 1;
-    (*obstacle)->x     = speed > 0 ? -OBSTACLE_SIZE : WINDOW_WIDTH + OBSTACLE_SIZE;
-    (*obstacle)->y     = SDL_rand(WINDOW_HEIGHT - WATER_Y - 70) + WATER_Y + 10;
-    (*obstacle)->speed = speed;
+    obstacle->alive = 1;
+    obstacle->x     = speed > 0 ? -OBSTACLE_SIZE : WINDOW_WIDTH + OBSTACLE_SIZE;
+    obstacle->y     = SDL_rand(WINDOW_HEIGHT - WATER_Y - 70) + WATER_Y + 10;
+    obstacle->speed = speed;
 
     switch (random_obstacle_type) {
-    default:
-        return;
     case 0:
-        barrel_new(*obstacle);
+        barrel_new(obstacle);
         break;
     }
+
+    return obstacle;
 }

@@ -16,9 +16,9 @@ void move_fish(Fish* fish, unsigned long delta_time) {
         fish->state = DEAD;
 }
 
-void spawn_fish(Fish** fish) {
+Fish* spawn_fish(Fish* fish) {
     const float speed = (SDL_randf() * 2.0) - 1.0;
-    if (speed == 0) return; // TODO: maybe something better?
+    if (speed == 0) return fish; // TODO: maybe something better?
 
     static const Uint8 FISH_TYPE_NUMBER = 2;
     const Uint8 random_fish_type        = SDL_rand(FISH_TYPE_NUMBER);
@@ -27,7 +27,7 @@ void spawn_fish(Fish** fish) {
     size_t size;
     switch (random_fish_type) {
     default:
-        return;
+        return fish;
     case 0:
         size = sizeof(NormalFish);
         break;
@@ -35,21 +35,21 @@ void spawn_fish(Fish** fish) {
         size = sizeof(UpDownFish);
         break;
     }
-    (*fish) = SDL_realloc(*fish, size);
+    fish = SDL_realloc(fish, size);
 
-    (*fish)->state = ALIVE;
-    (*fish)->x     = speed > 0 ? -FISH_SIZE : WINDOW_WIDTH + FISH_SIZE;
-    (*fish)->y     = SDL_rand(WINDOW_HEIGHT - WATER_Y - 70) + WATER_Y + 10;
-    (*fish)->speed = speed;
+    fish->state = ALIVE;
+    fish->x     = speed > 0 ? -FISH_SIZE : WINDOW_WIDTH + FISH_SIZE;
+    fish->y     = SDL_rand(WINDOW_HEIGHT - WATER_Y - 70) + WATER_Y + 10;
+    fish->speed = speed;
 
     switch (random_fish_type) {
-    default:
-        return;
     case 0:
-        normal_fish_new(*fish);
+        normal_fish_new(fish);
         break;
     case 1:
-        up_down_fish_new(*fish);
+        up_down_fish_new(fish);
         break;
     }
+
+    return fish;
 }

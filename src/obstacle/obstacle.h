@@ -16,6 +16,6 @@ typedef struct Obstacle {
 } Obstacle;
 
 void move_obstacle(Obstacle* obstacle, unsigned long delta_time);
-void spawn_obstacle(Obstacle** obstacle);
+Obstacle* spawn_obstacle(Obstacle* obstacle);
 
 #endif
