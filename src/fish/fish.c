@@ -5,13 +5,17 @@
 #include <fish/normal_fish.h>
 #include <fish/updown_fish.h>
 
+void load_fish_textures(SDL_Renderer* renderer) {
+    normal_fish_load_texture(renderer);
+    up_down_fish_load_texture(renderer);
+}
 
 void move_fish(Fish* fish, unsigned long delta_time) {
     fish->move(fish, delta_time);
 
     if (
         (fish->speed > 0 && fish->x >= WINDOW_WIDTH) ||
-        (fish->speed < 0 && fish->x <= -FISH_SIZE)
+        (fish->speed < 0 && fish->x <= -FISH_WIDTH)
     )
         fish->state = DEAD;
 }
@@ -38,7 +42,7 @@ Fish* spawn_fish(Fish* fish) {
     fish = SDL_realloc(fish, size);
 
     fish->state = ALIVE;
-    fish->x     = speed > 0 ? -FISH_SIZE : WINDOW_WIDTH + FISH_SIZE;
+    fish->x     = speed > 0 ? -FISH_WIDTH : WINDOW_WIDTH + FISH_WIDTH;
     fish->y     = SDL_rand(WINDOW_HEIGHT - WATER_Y - 70) + WATER_Y + 10;
     fish->speed = speed;
 

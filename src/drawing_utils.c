@@ -80,7 +80,8 @@ void draw_all_fishes(SDL_Renderer* renderer, GameContext* ctx, const SDL_FRect* 
     Uint64 delta = now - ctx->last_update;
 
     SDL_FRect fish_rect;
-    fish_rect.w = fish_rect.h = FISH_SIZE;
+    fish_rect.w = FISH_WIDTH;
+    fish_rect.h = FISH_HEIGHT;
     for (int i = 0; i < MAX_FISHES; i++) {
         Fish* current_fish = ctx->fishes[i];
         if (current_fish->state == DEAD) {
@@ -88,23 +89,36 @@ void draw_all_fishes(SDL_Renderer* renderer, GameContext* ctx, const SDL_FRect* 
             /* This might seem very low but it's not */
             if (probability < 1) ctx->fishes[i] = spawn_fish(current_fish);
         } else {
-            SDL_SetRenderDrawColor(
-                renderer,
-                (current_fish->color >> 16) & 0xFF,
-                (current_fish->color >> 8) & 0xFF,
-                current_fish->color & 0xFF,
-                SDL_ALPHA_OPAQUE
-            );
             if (current_fish->state == CAUGHT) {
                 fish_rect.y = current_fish->y = hook_rect->y + 15;
                 fish_rect.x = current_fish->x = HOOK_X;
-                draw_rect_around_x(renderer, &fish_rect);
+
+                fish_rect.x -= fish_rect.w / 2.0;
+                fish_rect.y += fish_rect.h / 2.0;
+                SDL_RenderTextureRotated(
+                    renderer,
+                    current_fish->texture,
+                    NULL,
+                    &fish_rect,
+                    -90.0l,
+                    NULL,
+                    SDL_FLIP_NONE
+                );
             } else {
                 move_fish(current_fish, delta);
                 fish_rect.x = current_fish->x;
                 fish_rect.y = current_fish->y;
 
-                SDL_RenderFillRect(renderer, &fish_rect);
+                SDL_RenderTextureRotated(
+                    renderer,
+                    current_fish->texture,
+                    NULL,
+                    &fish_rect,
+                    0.0l,
+                    NULL,
+                    current_fish->speed > 0 ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL
+                );
+
                 if (
                         current_fish->state == ALIVE &&
                         !ctx->caught_fish &&

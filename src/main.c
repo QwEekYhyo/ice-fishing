@@ -78,6 +78,8 @@ SDL_AppResult SDL_AppInit(void** appstate, int argc, char* argv[]) {
     test = SDL_CreateTextureFromSurface(as->renderer, test_surface);
     SDL_DestroySurface(test_surface);
 
+    load_fish_textures(as->renderer);
+
     return SDL_APP_CONTINUE;
 }
 
@@ -120,7 +122,7 @@ SDL_AppResult SDL_AppIterate(void* appstate) {
 
     rect.x = HOOK_X;
     rect.y = WATER_Y - 200;
-    SDL_RenderTexture(as->renderer, test, 0, &rect);
+    SDL_RenderTexture(as->renderer, test, NULL, &rect);
 
     /* Draw fishing line and hook */
     float mouse_y;
