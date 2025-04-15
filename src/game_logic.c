@@ -7,7 +7,10 @@
 #include <obstacle/obstacle.h>
 
 void init_game(GameContext* ctx) {
-    ctx->player_score = ctx->is_line_cut = ctx->caught_fish = 0;
+    ctx->player_lives = 3;
+    ctx->player_score = 0;
+    ctx->is_line_cut  = 0;
+    ctx->caught_fish  = 0;
 
     for (unsigned int i = 0; i < MAX_FISHES; i++) {
         ctx->fishes[i]        = SDL_malloc(sizeof(Fish));
@@ -34,11 +37,12 @@ bool handle_mouse_click(GameContext* ctx) {
         ctx->caught_fish = 0;
     }
 
-    if (ctx->is_line_cut) {
+    if (ctx->is_line_cut && ctx->player_lives > 0) {
         float mouse_y;
         SDL_GetMouseState(NULL, &mouse_y);
         if (mouse_y < WATER_Y) {
             ctx->is_line_cut = 0;
+            ctx->player_lives--;
         }
     }
 
