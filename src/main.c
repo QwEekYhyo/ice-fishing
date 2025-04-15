@@ -130,12 +130,14 @@ SDL_AppResult SDL_AppIterate(void* appstate) {
     mouse_y = SDL_max(mouse_y, rect.y + 5);
     SDL_SetRenderDrawColor(as->renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
     SDL_RenderLine(as->renderer, HOOK_X, rect.y, HOOK_X, mouse_y);
-    rect.w = rect.h = 24;
 
-    rect.x = HOOK_X;
-    rect.y = mouse_y;
-    SDL_SetRenderDrawColor(as->renderer, 246, 250, 1, SDL_ALPHA_OPAQUE);
-    draw_rect_around_x(as->renderer, &rect);
+    if (!ctx->is_line_cut) {
+        rect.w = rect.h = 24;
+        rect.x = HOOK_X;
+        rect.y = mouse_y;
+        SDL_SetRenderDrawColor(as->renderer, 246, 250, 1, SDL_ALPHA_OPAQUE);
+        draw_rect_around_x(as->renderer, &rect);
+    }
 
     /* Draw fishes */
     draw_all_fishes(as->renderer, ctx, &rect);

@@ -3,6 +3,7 @@
 #include <common_defs.h>
 #include <obstacle/obstacle.h>
 #include <obstacle/barrel.h>
+#include <obstacle/jellyfish.h>
 
 void move_obstacle(Obstacle* obstacle, unsigned long delta_time) {
     obstacle->move(obstacle, delta_time);
@@ -18,7 +19,7 @@ Obstacle* spawn_obstacle(Obstacle* obstacle) {
     const float speed = (SDL_randf() * 0.3) + 0.1;
     if (speed == 0) return obstacle; // TODO: maybe something better?
 
-    static const Uint8 OBSTACLE_TYPE_NUMBER = 1;
+    static const Uint8 OBSTACLE_TYPE_NUMBER = 2;
     const Uint8 random_obstacle_type        = SDL_rand(OBSTACLE_TYPE_NUMBER);
 
     // TODO: different probabilities for each type of obstacle
@@ -28,6 +29,9 @@ Obstacle* spawn_obstacle(Obstacle* obstacle) {
         return obstacle;
     case 0:
         size = sizeof(Barrel);
+        break;
+    case 1:
+        size = sizeof(Jellyfish);
         break;
     }
     obstacle = SDL_realloc(obstacle, size);
@@ -40,6 +44,9 @@ Obstacle* spawn_obstacle(Obstacle* obstacle) {
     switch (random_obstacle_type) {
     case 0:
         barrel_new(obstacle);
+        break;
+    case 1:
+        jellyfish_new(obstacle);
         break;
     }
 

@@ -1,3 +1,4 @@
+#include <SDL3/SDL_mouse.h>
 #include <SDL3/SDL_stdinc.h>
 
 #include <common_defs.h>
@@ -31,6 +32,14 @@ bool handle_mouse_click(GameContext* ctx) {
         } else fish->state = RELEASED;
 
         ctx->caught_fish = 0;
+    }
+
+    if (ctx->is_line_cut) {
+        float mouse_y;
+        SDL_GetMouseState(NULL, &mouse_y);
+        if (mouse_y < WATER_Y) {
+            ctx->is_line_cut = 0;
+        }
     }
 
     return score_increased;
