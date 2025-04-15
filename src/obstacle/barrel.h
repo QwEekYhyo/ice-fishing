@@ -8,6 +8,7 @@ typedef struct {
 } Barrel;
 
 void barrel_move(Obstacle* self, unsigned long delta_time);
+bool barrel_action_check(Obstacle* self, const void* context, const SDL_FRect* hook_rect);
 void barrel_action(void* context);
 void barrel_new(Obstacle* self);
 

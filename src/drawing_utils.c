@@ -157,11 +157,8 @@ void draw_all_obstacles(SDL_Renderer* renderer, GameContext* ctx, const SDL_FRec
             obstacle_rect.y = current_obstacle->y;
 
             SDL_RenderFillRect(renderer, &obstacle_rect);
-            if (
-                    ctx->caught_fish &&
-                    !ctx->is_line_cut &&
-                    SDL_HasRectIntersectionFloat(hook_rect, &obstacle_rect)
-            ) current_obstacle->perform_action(ctx);
+            if (current_obstacle->should_perform_action(current_obstacle, ctx, hook_rect))
+                current_obstacle->perform_action(ctx);
         }
     }
 }
