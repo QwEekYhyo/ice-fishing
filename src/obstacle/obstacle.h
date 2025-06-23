@@ -13,7 +13,11 @@ typedef struct Obstacle {
     Uint32 color;
     bool alive;
     void (*move)(struct Obstacle* self, unsigned long delta_time);
-    bool (*should_perform_action)(struct Obstacle* self, const void* context, const SDL_FRect* hook_rect);
+    bool (*should_perform_action)(
+        struct Obstacle* self,
+        const void* context,
+        const SDL_FRect* hook_rect
+    );
     void (*perform_action)(void* context);
 } Obstacle;
 

@@ -40,7 +40,7 @@ void jellyfish_action(void* context) {
         ctx->caught_fish->state = RELEASED;
         ctx->caught_fish        = 0;
     }
-    ctx->is_line_cut        = 1;
+    ctx->is_line_cut = 1;
 }
 
 void jellyfish_new(Obstacle* obstacle) {

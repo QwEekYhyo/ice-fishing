@@ -128,8 +128,8 @@ SDL_AppResult SDL_AppIterate(void* appstate) {
 
     if (!ctx->is_line_cut) {
         rect.w = rect.h = 24;
-        rect.x = HOOK_X;
-        rect.y = mouse_y;
+        rect.x          = HOOK_X;
+        rect.y          = mouse_y;
         SDL_SetRenderDrawColor(as->renderer, 246, 250, 1, SDL_ALPHA_OPAQUE);
         draw_rect_around_x(as->renderer, &rect);
     }

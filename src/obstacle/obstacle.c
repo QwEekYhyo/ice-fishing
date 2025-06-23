@@ -1,9 +1,9 @@
 #include <SDL3/SDL_stdinc.h>
 
 #include <common_defs.h>
-#include <obstacle/obstacle.h>
 #include <obstacle/barrel.h>
 #include <obstacle/jellyfish.h>
+#include <obstacle/obstacle.h>
 
 void move_obstacle(Obstacle* obstacle, unsigned long delta_time) {
     obstacle->move(obstacle, delta_time);
