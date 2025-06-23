@@ -9,7 +9,6 @@ typedef struct {
     Fish base;
 } NormalFish;
 
-void normal_fish_load_texture(SDL_Renderer* renderer);
 void normal_fish_move(Fish* self, unsigned long delta_time);
 void normal_fish_new(Fish* self);
 

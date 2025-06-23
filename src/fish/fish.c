@@ -5,11 +5,6 @@
 #include <fish/normal_fish.h>
 #include <fish/updown_fish.h>
 
-void load_fish_textures(SDL_Renderer* renderer) {
-    normal_fish_load_texture(renderer);
-    up_down_fish_load_texture(renderer);
-}
-
 void move_fish(Fish* fish, unsigned long delta_time) {
     fish->move(fish, delta_time);
 

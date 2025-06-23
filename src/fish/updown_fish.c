@@ -3,14 +3,6 @@
 #include <common_defs.h>
 #include <fish/updown_fish.h>
 
-static SDL_Texture* texture = NULL;
-
-void up_down_fish_load_texture(SDL_Renderer* renderer) {
-    SDL_Surface* surface = IMG_Load("../assets/poop.png"); // TODO: better path resolution
-    texture              = SDL_CreateTextureFromSurface(renderer, surface);
-    SDL_DestroySurface(surface);
-}
-
 void up_down_fish_move(Fish* fish, unsigned long delta_time) {
     UpDownFish* self = (UpDownFish*) fish;
 
@@ -37,7 +29,7 @@ void up_down_fish_new(Fish* fish) {
 
     self->base.w               = 50.0f;
     self->base.h               = 50.0f;
-    self->base.texture         = texture;
+    self->base.texture         = "up_down_fish";
     self->base.move            = up_down_fish_move;
     self->no_direction_changes = 50;
 }

@@ -1,6 +1,10 @@
 #include <SDL3/SDL_mouse.h>
 #include <SDL3/SDL_stdinc.h>
 
+#include <SDL3_image/SDL_image.h>
+
+#include <stb_ds.h>
+
 #include <common_defs.h>
 #include <fish/fish.h>
 #include <game_logic.h>
@@ -21,6 +25,30 @@ void init_game(GameContext* ctx) {
         ctx->obstacles[i]        = SDL_malloc(sizeof(Obstacle));
         ctx->obstacles[i]->alive = 0;
     }
+}
+
+void init_textures(GameContext* ctx, SDL_Renderer* renderer) {
+    ctx->textures = NULL;
+
+    SDL_Surface* surface;
+    SDL_Texture* texture;
+
+    // TODO: default texture
+
+    surface = IMG_Load("../assets/fish.png"); // TODO: better path resolution
+    texture = SDL_CreateTextureFromSurface(renderer, surface);
+    shput(ctx->textures, "normal_fish", texture);
+    SDL_DestroySurface(surface);
+
+    surface = IMG_Load("../assets/poop.png"); // TODO: better path resolution
+    texture = SDL_CreateTextureFromSurface(renderer, surface);
+    shput(ctx->textures, "up_down_fish", texture);
+    SDL_DestroySurface(surface);
+
+    surface = IMG_Load("../assets/fishingrod.png"); // TODO: better path resolution
+    texture = SDL_CreateTextureFromSurface(renderer, surface);
+    shput(ctx->textures, "fishing_rod", texture);
+    SDL_DestroySurface(surface);
 }
 
 bool handle_mouse_click(GameContext* ctx) {

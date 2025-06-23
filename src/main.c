@@ -13,6 +13,9 @@
 
 #include <SDL3_image/SDL_image.h>
 
+#define STB_DS_IMPLEMENTATION
+#include <stb_ds.h>
+
 #include <common_defs.h>
 #include <drawing_utils.h>
 #include <fish/fish.h>
@@ -27,8 +30,6 @@ typedef struct {
     SDL_Texture* score_texture;
     GameContext* ctx;
 } AppState;
-
-static SDL_Texture* test;
 
 SDL_AppResult SDL_AppInit(void** appstate, int argc, char* argv[]) {
     SDL_SetAppMetadata("Ice Fishing", "0.1", "fr.puceaulytech.ice-fishing");
@@ -72,13 +73,7 @@ SDL_AppResult SDL_AppInit(void** appstate, int argc, char* argv[]) {
 
     as->ctx = SDL_malloc(sizeof(GameContext));
     init_game(as->ctx);
-
-    SDL_Surface* test_surface =
-        IMG_Load("../assets/fishingrod.png"); // TODO: better path resolution
-    test = SDL_CreateTextureFromSurface(as->renderer, test_surface);
-    SDL_DestroySurface(test_surface);
-
-    load_fish_textures(as->renderer);
+    init_textures(as->ctx, as->renderer);
 
     return SDL_APP_CONTINUE;
 }
@@ -122,7 +117,7 @@ SDL_AppResult SDL_AppIterate(void* appstate) {
 
     rect.x = HOOK_X;
     rect.y = WATER_Y - 200;
-    SDL_RenderTexture(as->renderer, test, NULL, &rect);
+    SDL_RenderTexture(as->renderer, shget(ctx->textures, "fishing_rod"), NULL, &rect);
 
     /* Draw fishing line and hook */
     float mouse_y;
@@ -158,7 +153,12 @@ void SDL_AppQuit(void* appstate, SDL_AppResult result) {
     AppState* as = (AppState*) appstate;
     SDL_DestroySurface(as->score_surface);
     SDL_DestroyTexture(as->score_texture);
-    SDL_DestroyTexture(test);
+
+    int nb_textures = shlen(as->ctx->textures);
+    for (int i = 0; i < nb_textures; i++)
+        SDL_DestroyTexture(as->ctx->textures[i].value);
+    shfree(as->ctx->textures);
+
     SDL_DestroyRenderer(as->renderer);
     SDL_DestroyWindow(as->window);
     TTF_CloseFont(as->font);

@@ -3,6 +3,8 @@
 #include <SDL3/SDL_stdinc.h>
 #include <SDL3/SDL_surface.h>
 
+#include <stb_ds.h>
+
 #include <drawing_utils.h>
 #include <fish/fish.h>
 #include <obstacle/obstacle.h>
@@ -97,7 +99,7 @@ void draw_all_fishes(SDL_Renderer* renderer, GameContext* ctx, const SDL_FRect* 
                 fish_rect.y += fish_rect.h / 2.0;
                 SDL_RenderTextureRotated(
                     renderer,
-                    current_fish->texture,
+                    shget(ctx->textures, current_fish->texture),
                     NULL,
                     &fish_rect,
                     -90.0l,
@@ -111,7 +113,7 @@ void draw_all_fishes(SDL_Renderer* renderer, GameContext* ctx, const SDL_FRect* 
 
                 SDL_RenderTextureRotated(
                     renderer,
-                    current_fish->texture,
+                    shget(ctx->textures, current_fish->texture),
                     NULL,
                     &fish_rect,
                     0.0l,
