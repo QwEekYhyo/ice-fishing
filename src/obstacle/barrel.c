@@ -2,8 +2,6 @@
 #include <game_logic.h>
 #include <obstacle/barrel.h>
 
-static const Uint32 COLOR = 0x4D2708;
-
 void barrel_move(Obstacle* obstacle, unsigned long delta_time) {
     Barrel* self = (Barrel*) obstacle;
     self->base.x += delta_time * self->base.speed;
@@ -13,8 +11,8 @@ bool barrel_action_check(Obstacle* self, const void* context, const SDL_FRect* h
     SDL_FRect self_rect = {
         self->x,
         self->y,
-        OBSTACLE_SIZE,
-        OBSTACLE_SIZE,
+        self->w,
+        self->h,
     };
 
     GameContext* ctx = (GameContext*) context;
@@ -36,7 +34,9 @@ void barrel_action(void* context) {
 void barrel_new(Obstacle* obstacle) {
     Barrel* self = (Barrel*) obstacle;
 
-    self->base.color                 = COLOR;
+    self->base.w                     = 100.0f;
+    self->base.h                     = 126.8f;
+    self->base.texture               = "barrel_obstacle";
     self->base.move                  = barrel_move;
     self->base.should_perform_action = barrel_action_check;
     self->base.perform_action        = barrel_action;

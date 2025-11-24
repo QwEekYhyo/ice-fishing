@@ -27,29 +27,41 @@ void init_game(GameContext* ctx) {
     }
 }
 
+/**************** TEXTURE CODE ****************/
+/*  I might move this to another file later   */
+typedef struct {
+    const char* name;
+    const char* path;
+} TextureEntry;
+
 void init_textures(GameContext* ctx, SDL_Renderer* renderer) {
     ctx->textures = NULL;
 
-    SDL_Surface* surface;
-    SDL_Texture* texture;
+    // TODO: better path resolution
+    TextureEntry texture_entries[] = {
+        { "normal_fish", "../assets/fish.png" },
+        { "up_down_fish", "../assets/greyfish.png" },
+        { "fishing_rod", "../assets/fishingrod.png" },
+        { "barrel_obstacle", "../assets/barrel.png" },
+        { "jellyfish_obstacle", "../assets/jellyfish.png" },
+    };
 
     // TODO: default texture
 
-    surface = IMG_Load("../assets/fish.png"); // TODO: better path resolution
-    texture = SDL_CreateTextureFromSurface(renderer, surface);
-    shput(ctx->textures, "normal_fish", texture);
-    SDL_DestroySurface(surface);
+    for (unsigned int i = 0; i < sizeof(texture_entries) / sizeof(texture_entries[0]); i++) {
+        SDL_Surface* surface = IMG_Load(texture_entries[i].path);
+        if (!surface) {
+            SDL_Log("Failed to load %s: %s", texture_entries[i].path, SDL_GetError());
+            continue;
+        }
 
-    surface = IMG_Load("../assets/greyfish.png"); // TODO: better path resolution
-    texture = SDL_CreateTextureFromSurface(renderer, surface);
-    shput(ctx->textures, "up_down_fish", texture);
-    SDL_DestroySurface(surface);
-
-    surface = IMG_Load("../assets/fishingrod.png"); // TODO: better path resolution
-    texture = SDL_CreateTextureFromSurface(renderer, surface);
-    shput(ctx->textures, "fishing_rod", texture);
-    SDL_DestroySurface(surface);
+        SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
+        shput(ctx->textures, texture_entries[i].name, texture);
+        SDL_DestroySurface(surface);
+    }
 }
+
+/**************** END OF TEXTURE CODE ****************/
 
 bool handle_mouse_click(GameContext* ctx) {
     Fish* fish           = ctx->caught_fish;

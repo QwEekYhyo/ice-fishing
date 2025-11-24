@@ -10,7 +10,7 @@ void move_obstacle(Obstacle* obstacle, unsigned long delta_time) {
 
     if (
         (obstacle->speed > 0 && obstacle->x >= WINDOW_WIDTH) ||
-        (obstacle->speed < 0 && obstacle->x <= -OBSTACLE_SIZE)
+        (obstacle->speed < 0 && obstacle->x <= -obstacle->w)
     )
         obstacle->alive = 0;
 }
@@ -37,7 +37,7 @@ Obstacle* spawn_obstacle(Obstacle* obstacle) {
     obstacle = SDL_realloc(obstacle, size);
 
     obstacle->alive = 1;
-    obstacle->x     = speed > 0 ? -OBSTACLE_SIZE : WINDOW_WIDTH + OBSTACLE_SIZE;
+    obstacle->x     = speed > 0 ? -obstacle->w : WINDOW_WIDTH + obstacle->w;
     obstacle->y     = SDL_rand(WINDOW_HEIGHT - WATER_Y - 70) + WATER_Y + 10;
     obstacle->speed = speed;
 

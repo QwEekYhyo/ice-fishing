@@ -3,8 +3,6 @@
 #include <game_logic.h>
 #include <obstacle/jellyfish.h>
 
-static const Uint32 COLOR = 0x7EA3DE;
-
 void jellyfish_move(Obstacle* obstacle, unsigned long delta_time) {
     Jellyfish* self = (Jellyfish*) obstacle;
     self->base.x += delta_time * self->base.speed;
@@ -14,8 +12,8 @@ bool jellyfish_action_check(Obstacle* self, const void* context, const SDL_FRect
     SDL_FRect self_rect = {
         self->x,
         self->y,
-        OBSTACLE_SIZE,
-        OBSTACLE_SIZE,
+        self->w,
+        self->h,
     };
 
     SDL_FRect whole_line_rect = {
@@ -46,7 +44,9 @@ void jellyfish_action(void* context) {
 void jellyfish_new(Obstacle* obstacle) {
     Jellyfish* self = (Jellyfish*) obstacle;
 
-    self->base.color                 = COLOR;
+    self->base.w                     = 70.0f;
+    self->base.h                     = 80.2f;
+    self->base.texture               = "jellyfish_obstacle";
     self->base.move                  = jellyfish_move;
     self->base.should_perform_action = jellyfish_action_check;
     self->base.perform_action        = jellyfish_action;

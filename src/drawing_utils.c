@@ -140,25 +140,30 @@ void draw_all_obstacles(SDL_Renderer* renderer, GameContext* ctx, const SDL_FRec
     Uint64 delta = now - ctx->last_update;
 
     SDL_FRect obstacle_rect;
-    obstacle_rect.w = obstacle_rect.h = OBSTACLE_SIZE;
     for (int i = 0; i < MAX_OBSTACLES; i++) {
         Obstacle* current_obstacle = ctx->obstacles[i];
         if (current_obstacle->alive == 0) {
             Sint32 probability = SDL_rand(150);
             if (probability < 1) ctx->obstacles[i] = spawn_obstacle(current_obstacle);
         } else {
-            SDL_SetRenderDrawColor(
-                renderer,
-                (current_obstacle->color >> 16) & 0xFF,
-                (current_obstacle->color >> 8) & 0xFF,
-                current_obstacle->color & 0xFF,
-                SDL_ALPHA_OPAQUE
-            );
             move_obstacle(current_obstacle, delta);
+
             obstacle_rect.x = current_obstacle->x;
             obstacle_rect.y = current_obstacle->y;
+            obstacle_rect.w = current_obstacle->w;
+            obstacle_rect.h = current_obstacle->h;
 
-            SDL_RenderFillRect(renderer, &obstacle_rect);
+
+            SDL_RenderTextureRotated(
+                renderer,
+                shget(ctx->textures, current_obstacle->texture),
+                NULL,
+                &obstacle_rect,
+                20.0l,
+                NULL,
+                current_obstacle->speed > 0 ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL
+            );
+
             if (current_obstacle->should_perform_action(current_obstacle, ctx, hook_rect))
                 current_obstacle->perform_action(ctx);
         }

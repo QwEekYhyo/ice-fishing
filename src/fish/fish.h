@@ -14,7 +14,7 @@ typedef enum {
 } FishState;
 
 typedef struct Fish {
-    float x, y, w, h;
+    float x, y, w, h; // Maybe directly store an SDL_FRect??
     float speed;
     const char* texture;
     FishState state;
