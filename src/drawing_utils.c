@@ -58,7 +58,7 @@ void draw_player(SDL_Renderer* renderer) {
     draw_rect_around_x(renderer, &rect);
 }
 
-static const SDL_Color color = {0, 0, 0, 255};
+static const SDL_Color color = { 0, 0, 0, 255 };
 static char text[100];
 
 void update_player_score(
@@ -152,7 +152,6 @@ void draw_all_obstacles(SDL_Renderer* renderer, GameContext* ctx, const SDL_FRec
             obstacle_rect.y = current_obstacle->y;
             obstacle_rect.w = current_obstacle->w;
             obstacle_rect.h = current_obstacle->h;
-
 
             SDL_RenderTextureRotated(
                 renderer,
