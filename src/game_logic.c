@@ -40,7 +40,7 @@ void init_textures(GameContext* ctx, SDL_Renderer* renderer) {
     shput(ctx->textures, "normal_fish", texture);
     SDL_DestroySurface(surface);
 
-    surface = IMG_Load("../assets/poop.png"); // TODO: better path resolution
+    surface = IMG_Load("../assets/greyfish.png"); // TODO: better path resolution
     texture = SDL_CreateTextureFromSurface(renderer, surface);
     shput(ctx->textures, "up_down_fish", texture);
     SDL_DestroySurface(surface);

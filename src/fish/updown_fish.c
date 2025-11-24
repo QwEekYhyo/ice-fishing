@@ -27,7 +27,7 @@ void up_down_fish_move(Fish* fish, unsigned long delta_time) {
 void up_down_fish_new(Fish* fish) {
     UpDownFish* self = (UpDownFish*) fish;
 
-    self->base.w               = 50.0f;
+    self->base.w               = 122.0f;
     self->base.h               = 50.0f;
     self->base.texture         = "up_down_fish";
     self->base.move            = up_down_fish_move;
