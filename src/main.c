@@ -105,10 +105,12 @@ SDL_AppResult SDL_AppIterate(void* appstate) {
     draw_background(as->renderer, &rect);
 
     /* Draw player score */
-    rect.x = 40;
-    rect.y = 20;
-    rect.w = 200;
-    rect.h = 70;
+    Uint16 score_size = 120;
+    rect.w = score_size;
+    rect.h = score_size;
+
+    rect.x = HOOK_X - 2 * score_size;
+    rect.y = WATER_Y - 30 - score_size;
     SDL_RenderTexture(as->renderer, as->score_texture, NULL, &rect);
 
     /* Draw static player */

@@ -68,12 +68,12 @@ void update_player_score(
     SDL_Texture** texture,
     unsigned long score
 ) {
-    SDL_snprintf(text, 100, "%lu Fish", score);
+    SDL_snprintf(text, 100, " %lu\nFish", score);
 
     if (*surface) SDL_DestroySurface(*surface);
     if (*texture) SDL_DestroyTexture(*texture);
 
-    *surface = TTF_RenderText_Solid(font, text, SDL_strlen(text), color);
+    *surface = TTF_RenderText_Solid_Wrapped(font, text, SDL_strlen(text), color, 0);
     *texture = SDL_CreateTextureFromSurface(renderer, *surface);
 }
 
