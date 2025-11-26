@@ -163,7 +163,8 @@ void SDL_AppQuit(void* appstate, SDL_AppResult result) {
 
     SDL_DestroyRenderer(as->renderer);
     SDL_DestroyWindow(as->window);
-    TTF_CloseFont(as->font);
+    if (TTF_WasInit())
+        TTF_CloseFont(as->font);
 
     for (int i = 0; i < MAX_FISHES; i++)
         SDL_free(as->ctx->fishes[i]);
