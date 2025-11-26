@@ -17,7 +17,7 @@ find_package(SDL3_image REQUIRED CONFIG)
 file(GLOB_RECURSE SOURCES ${PROJECT_SOURCE_DIR}/src/*.c)
 
 add_executable(ice-fishing ${SOURCES})
-target_include_directories(ice-fishing PRIVATE ${PROJECT_SOURCE_DIR}/src)
+target_include_directories(ice-fishing PRIVATE ${PROJECT_SOURCE_DIR}/include)
 target_link_libraries(ice-fishing PRIVATE
     SDL3_ttf::SDL3_ttf
     SDL3_image::SDL3_image
