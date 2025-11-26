@@ -63,16 +63,18 @@ void init_textures(GameContext* ctx, SDL_Renderer* renderer) {
 
 /**************** END OF TEXTURE CODE ****************/
 
-bool handle_mouse_click(GameContext* ctx) {
+MouseClickResult handle_mouse_click(GameContext* ctx) {
     Fish* fish           = ctx->caught_fish;
-    bool score_increased = 0;
+    MouseClickResult res = 0;
 
     if (fish) {
         if (fish->y < WATER_Y) {
             fish->state = DEAD;
             ctx->player_score += 1;
-            score_increased = 1;
-        } else fish->state = RELEASED;
+            res |= SCORE_UPDATED;
+        } else {
+            fish->state = RELEASED;
+        }
 
         ctx->caught_fish = 0;
     }
@@ -83,8 +85,9 @@ bool handle_mouse_click(GameContext* ctx) {
         if (mouse_y < WATER_Y) {
             ctx->is_line_cut = 0;
             ctx->player_lives--;
+            res |= LIVES_UPDATED;
         }
     }
 
-    return score_increased;
+    return res;
 }

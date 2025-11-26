@@ -26,7 +26,11 @@ typedef struct {
 void init_game(GameContext* ctx);
 void init_textures(GameContext* ctx, SDL_Renderer* renderer);
 
-/* Returns true if the player score needs to be updated */
-bool handle_mouse_click(GameContext* context);
+typedef enum {
+    SCORE_UPDATED = 1 << 0,
+    LIVES_UPDATED = 1 << 1,
+} MouseClickResult;
+
+MouseClickResult handle_mouse_click(GameContext* context);
 
 #endif

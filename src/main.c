@@ -28,6 +28,7 @@ typedef struct {
     SDL_Renderer* renderer;
     TTF_Font* font;
     TextLabel* score_text;
+    TextLabel* lives_text;
     GameContext* ctx;
 } AppState;
 
@@ -72,6 +73,10 @@ SDL_AppResult SDL_AppInit(void** appstate, int argc, char* argv[]) {
 
     as->ctx = SDL_malloc(sizeof(GameContext));
     init_game(as->ctx);
+
+    as->lives_text =
+        text_label_new(as->font, (SDL_Color) { 0, 0, 0, 255 }, get_player_lives_text(as->ctx->player_lives));
+
     init_textures(as->ctx, as->renderer);
 
     return SDL_APP_CONTINUE;
@@ -82,8 +87,11 @@ SDL_AppResult SDL_AppEvent(void* appstate, SDL_Event* event) {
 
     if (event->type == SDL_EVENT_MOUSE_BUTTON_DOWN) {
         AppState* as = (AppState*) appstate;
-        if (handle_mouse_click(as->ctx))
+        MouseClickResult result = handle_mouse_click(as->ctx);
+        if (result & SCORE_UPDATED)
             text_label_set(as->score_text, get_player_score_text(as->ctx->player_score));
+        if (result & LIVES_UPDATED)
+            text_label_set(as->lives_text, get_player_lives_text(as->ctx->player_lives));
     }
 
     return SDL_APP_CONTINUE;
@@ -96,6 +104,14 @@ SDL_AppResult SDL_AppIterate(void* appstate) {
     SDL_FRect rect;
     /* Draw background */
     draw_background(as->renderer, &rect);
+
+    /* Draw player lives */
+    text_label_render(
+        as->renderer,
+        as->lives_text,
+        10.0f,
+        2.0f
+    );
 
     /* Draw player score */
     text_label_render(

@@ -3,6 +3,7 @@
 
 #include <SDL3/SDL_pixels.h>
 #include <SDL3/SDL_render.h>
+#include <SDL3/SDL_stdinc.h>
 #include <SDL3_ttf/SDL_ttf.h>
 
 typedef struct {
@@ -20,6 +21,10 @@ void text_label_free(TextLabel* text_label);
 TextLabel* text_label_new(TTF_Font* font, SDL_Color color, const char* text);
 
 /* Text buffer manipulation utils */
-const char* get_player_score_text(unsigned long score);
+const char* get_player_score_text(Uint32 score);
+const char* get_player_lives_text(Uint8 lives);
+
+/* Temporary sortof mutex shit */
+void release_text_buffer();
 
 #endif
