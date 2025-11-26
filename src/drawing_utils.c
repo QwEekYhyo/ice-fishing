@@ -58,25 +58,6 @@ void draw_player(SDL_Renderer* renderer) {
     draw_rect_around_x(renderer, &rect);
 }
 
-static const SDL_Color color = { 0, 0, 0, 255 };
-static char text[100];
-
-void update_player_score(
-    SDL_Renderer* renderer,
-    TTF_Font* font,
-    SDL_Surface** surface,
-    SDL_Texture** texture,
-    unsigned long score
-) {
-    SDL_snprintf(text, 100, " %lu\nFish", score);
-
-    if (*surface) SDL_DestroySurface(*surface);
-    if (*texture) SDL_DestroyTexture(*texture);
-
-    *surface = TTF_RenderText_Solid_Wrapped(font, text, SDL_strlen(text), color, 0);
-    *texture = SDL_CreateTextureFromSurface(renderer, *surface);
-}
-
 void draw_all_fishes(SDL_Renderer* renderer, GameContext* ctx, const SDL_FRect* hook_rect) {
     Uint64 now   = SDL_GetTicks();
     Uint64 delta = now - ctx->last_update;

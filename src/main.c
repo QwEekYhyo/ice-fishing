@@ -21,13 +21,13 @@
 #include <fish/fish.h>
 #include <game_logic.h>
 #include <obstacle/obstacle.h>
+#include <text.h>
 
 typedef struct {
     SDL_Window* window;
     SDL_Renderer* renderer;
     TTF_Font* font;
-    SDL_Surface* score_surface;
-    SDL_Texture* score_texture;
+    TextLabel* score_text;
     GameContext* ctx;
 } AppState;
 
@@ -61,15 +61,14 @@ SDL_AppResult SDL_AppInit(void** appstate, int argc, char* argv[]) {
         return SDL_APP_FAILURE;
     }
 
-    as->font = TTF_OpenFont("../assets/comicrazy.ttf", 100); // TODO: better path resolution
+    as->font = TTF_OpenFont("../assets/comicrazy.ttf", 40); // TODO: better path resolution
     if (!as->font) {
         SDL_Log("Couldn't open font: %s", SDL_GetError());
         return SDL_APP_FAILURE;
     }
 
-    as->score_surface = NULL;
-    as->score_texture = NULL;
-    update_player_score(as->renderer, as->font, &as->score_surface, &as->score_texture, 0);
+    as->score_text =
+        text_label_new(as->font, (SDL_Color) { 0, 0, 0, 255 }, get_player_score_text(0));
 
     as->ctx = SDL_malloc(sizeof(GameContext));
     init_game(as->ctx);
@@ -84,13 +83,7 @@ SDL_AppResult SDL_AppEvent(void* appstate, SDL_Event* event) {
     if (event->type == SDL_EVENT_MOUSE_BUTTON_DOWN) {
         AppState* as = (AppState*) appstate;
         if (handle_mouse_click(as->ctx))
-            update_player_score(
-                as->renderer,
-                as->font,
-                &as->score_surface,
-                &as->score_texture,
-                as->ctx->player_score
-            );
+            text_label_set(as->score_text, get_player_score_text(as->ctx->player_score));
     }
 
     return SDL_APP_CONTINUE;
@@ -105,15 +98,14 @@ SDL_AppResult SDL_AppIterate(void* appstate) {
     draw_background(as->renderer, &rect);
 
     /* Draw player score */
-    Uint16 score_size = 120;
-    rect.w = score_size;
-    rect.h = score_size;
+    text_label_render(
+        as->renderer,
+        as->score_text,
+        HOOK_X - 20.0f - 2.0f * as->score_text->w,
+        WATER_Y - 30.0f - as->score_text->h
+    );
 
-    rect.x = HOOK_X - 2 * score_size;
-    rect.y = WATER_Y - 30 - score_size;
-    SDL_RenderTexture(as->renderer, as->score_texture, NULL, &rect);
-
-    /* Draw static player */
+    /* Draw static player & its fishing rod */
     draw_player(as->renderer);
     rect.h = rect.w = 150;
 
@@ -153,8 +145,7 @@ void SDL_AppQuit(void* appstate, SDL_AppResult result) {
     if (appstate == NULL) return;
 
     AppState* as = (AppState*) appstate;
-    SDL_DestroySurface(as->score_surface);
-    SDL_DestroyTexture(as->score_texture);
+    text_label_free(as->score_text);
 
     int nb_textures = shlen(as->ctx->textures);
     for (int i = 0; i < nb_textures; i++)
@@ -163,8 +154,7 @@ void SDL_AppQuit(void* appstate, SDL_AppResult result) {
 
     SDL_DestroyRenderer(as->renderer);
     SDL_DestroyWindow(as->window);
-    if (TTF_WasInit())
-        TTF_CloseFont(as->font);
+    if (TTF_WasInit()) TTF_CloseFont(as->font);
 
     for (int i = 0; i < MAX_FISHES; i++)
         SDL_free(as->ctx->fishes[i]);

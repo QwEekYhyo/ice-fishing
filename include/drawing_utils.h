@@ -15,14 +15,6 @@ void draw_rect_around_x(SDL_Renderer* renderer, SDL_FRect* rect);
 void draw_background(SDL_Renderer* renderer, SDL_FRect* rect);
 void draw_player(SDL_Renderer* renderer);
 
-void update_player_score(
-    SDL_Renderer* renderer,
-    TTF_Font* font,
-    SDL_Surface** surface,
-    SDL_Texture** texture,
-    unsigned long score
-);
-
 void draw_all_fishes(SDL_Renderer* renderer, GameContext* ctx, const SDL_FRect* hook_rect);
 void draw_all_obstacles(SDL_Renderer* renderer, GameContext* ctx, const SDL_FRect* hook_rect);
 
