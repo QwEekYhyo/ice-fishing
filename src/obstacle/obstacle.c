@@ -2,6 +2,7 @@
 
 #include <common_defs.h>
 #include <obstacle/barrel.h>
+#include <obstacle/crab.h>
 #include <obstacle/jellyfish.h>
 #include <obstacle/obstacle.h>
 
@@ -20,7 +21,7 @@ Obstacle* spawn_obstacle(Obstacle* obstacle) {
     if (speed == 0.0f) speed = 0.3f;
     else if (SDL_randf() >= 0.5f) speed *= -1.0f;
 
-    static const Uint8 OBSTACLE_TYPE_NUMBER = 2;
+    static const Uint8 OBSTACLE_TYPE_NUMBER = 3;
     const Uint8 random_obstacle_type        = SDL_rand(OBSTACLE_TYPE_NUMBER);
 
     // TODO: different probabilities for each type of obstacle
@@ -33,6 +34,9 @@ Obstacle* spawn_obstacle(Obstacle* obstacle) {
         break;
     case 1:
         size = sizeof(Jellyfish);
+        break;
+    case 2:
+        size = sizeof(Crab);
         break;
     }
     // Maybe it would be more efficient
@@ -49,6 +53,9 @@ Obstacle* spawn_obstacle(Obstacle* obstacle) {
         break;
     case 1:
         jellyfish_new(obstacle);
+        break;
+    case 2:
+        crab_new(obstacle);
         break;
     }
 

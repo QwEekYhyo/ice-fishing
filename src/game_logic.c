@@ -44,6 +44,7 @@ void init_textures(GameContext* ctx, SDL_Renderer* renderer) {
         { "fishing_rod", "../assets/fishingrod.png" },
         { "barrel_obstacle", "../assets/barrel.png" },
         { "jellyfish_obstacle", "../assets/jellyfish.png" },
+        { "crab_obstacle", "../assets/crab.png" },
     };
 
     // TODO: default texture
