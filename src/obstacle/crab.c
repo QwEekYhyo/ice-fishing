@@ -1,3 +1,6 @@
+#include <SDL3/SDL_stdinc.h>
+#include <SDL3/SDL_timer.h>
+
 #include <common_defs.h>
 #include <game_logic.h>
 #include <obstacle/crab.h>
@@ -14,13 +17,36 @@ void crab_move(Obstacle* obstacle, unsigned long delta_time) {
                 || self->base.speed < 0.0f && self->base.x < HOOK_X + distance_to_hook
             )
        ) {
-        self->base.speed *= -1.0f;
-        self->state = CRABSTATE_MOVING_BACKWARD;
+        self->state = CRABSTATE_PERFORMING_ACTION;
+        self->start_time = SDL_GetTicks();
     }
-    self->base.x += delta_time * self->base.speed;
+
+    if (
+            self->state == CRABSTATE_MOVING_FORWARD ||
+            self->state == CRABSTATE_MOVING_BACKWARD
+    ) {
+        self->base.x += delta_time * self->base.speed;
+    }
 }
 
-bool crab_action_check(Obstacle* self, const void* context, const SDL_FRect* hook_rect) {
+bool crab_action_check(Obstacle* obstacle, const void* context, const SDL_FRect* hook_rect) {
+    Crab* self = (Crab*) obstacle;
+
+    if (self->state == CRABSTATE_PERFORMING_ACTION) {
+        Uint64 now = SDL_GetTicks();
+        if (now - self->start_time > 2000) {
+            self->start_time = now;
+            self->state = CRABSTATE_PERFORMED_ACTION;
+            return hook_rect->y > WATER_Y + self->base.h / 2.0f;
+        }
+    } else if (self->state == CRABSTATE_PERFORMED_ACTION) {
+        Uint64 now = SDL_GetTicks();
+        if (now - self->start_time > 1000) {
+            self->state = CRABSTATE_MOVING_BACKWARD;
+            self->base.speed *= -1.0f;
+        }
+    }
+
     return false;
 }
 

@@ -8,12 +8,14 @@
 enum CrabState {
     CRABSTATE_MOVING_FORWARD,
     CRABSTATE_PERFORMING_ACTION,
+    CRABSTATE_PERFORMED_ACTION,
     CRABSTATE_MOVING_BACKWARD,
 };
 
 typedef struct {
     Obstacle base;
     Uint8 state;
+    Uint64 start_time;
 } Crab;
 
 void crab_move(Obstacle* self, unsigned long delta_time);
