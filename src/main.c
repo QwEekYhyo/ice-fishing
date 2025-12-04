@@ -134,7 +134,13 @@ SDL_AppResult SDL_AppIterate(void* appstate) {
     SDL_GetMouseState(NULL, &mouse_y);
     mouse_y = SDL_max(mouse_y, rect.y + 5);
     SDL_SetRenderDrawColor(as->renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
-    SDL_RenderLine(as->renderer, HOOK_X, rect.y, HOOK_X, mouse_y);
+    SDL_RenderLine(
+            as->renderer,
+            HOOK_X,
+            rect.y,
+            HOOK_X,
+            ctx->is_line_cut ? mouse_y - 50.0f : mouse_y
+    );
 
     if (!ctx->is_line_cut) {
         rect.w = rect.h = 24;
