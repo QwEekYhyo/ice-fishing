@@ -16,8 +16,9 @@ void move_obstacle(Obstacle* obstacle, unsigned long delta_time) {
 }
 
 Obstacle* spawn_obstacle(Obstacle* obstacle) {
-    const float speed = (SDL_randf() * 0.3) + 0.1;
-    if (speed == 0) return obstacle; // TODO: maybe something better?
+    float speed = (SDL_randf() * 0.3f) + 0.1f;
+    if (speed == 0.0f) speed = 0.3f;
+    else if (SDL_randf() >= 0.5f) speed *= -1.0f;
 
     static const Uint8 OBSTACLE_TYPE_NUMBER = 2;
     const Uint8 random_obstacle_type        = SDL_rand(OBSTACLE_TYPE_NUMBER);
@@ -34,10 +35,11 @@ Obstacle* spawn_obstacle(Obstacle* obstacle) {
         size = sizeof(Jellyfish);
         break;
     }
+    // Maybe it would be more efficient
+    // to just alloc ONCE the size of the biggest obstacle
     obstacle = SDL_realloc(obstacle, size);
 
     obstacle->alive = 1;
-    obstacle->x     = speed > 0 ? -obstacle->w : WINDOW_WIDTH + obstacle->w;
     obstacle->y     = SDL_rand(WINDOW_HEIGHT - WATER_Y - 70) + WATER_Y + 10;
     obstacle->speed = speed;
 
@@ -49,6 +51,8 @@ Obstacle* spawn_obstacle(Obstacle* obstacle) {
         jellyfish_new(obstacle);
         break;
     }
+
+    obstacle->x = speed >= 0 ? -obstacle->w : WINDOW_WIDTH + obstacle->w;
 
     return obstacle;
 }

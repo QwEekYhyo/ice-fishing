@@ -10,6 +10,7 @@ typedef struct Obstacle {
     float x, y, w, h; // Maybe directly store an SDL_FRect??
     float speed;
     const char* texture;
+    double texture_angle;
     bool alive;
     void (*move)(struct Obstacle* self, unsigned long delta_time);
     bool (*should_perform_action)(

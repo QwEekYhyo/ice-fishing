@@ -17,7 +17,6 @@ void move_fish(Fish* fish, unsigned long delta_time) {
 
 Fish* spawn_fish(Fish* fish) {
     const float speed = (SDL_randf() * 2.0) - 1.0;
-    if (speed == 0) return fish; // TODO: maybe something better?
 
     static const Uint8 FISH_TYPE_NUMBER = 2;
     const Uint8 random_fish_type        = SDL_rand(FISH_TYPE_NUMBER);
@@ -46,9 +45,9 @@ Fish* spawn_fish(Fish* fish) {
     }
 
     fish->state = ALIVE;
-    fish->x     = speed > 0 ? -fish->w : WINDOW_WIDTH + fish->w;
+    fish->x     = speed >= 0 ? -fish->w : WINDOW_WIDTH + fish->w;
     fish->y     = SDL_rand(WINDOW_HEIGHT - WATER_Y - 70) + WATER_Y + 10;
-    fish->speed = speed;
+    fish->speed = speed != 0 ? speed : 0.1f;
 
     return fish;
 }

@@ -4,8 +4,12 @@
 #define WINDOW_WIDTH 1280
 #define WINDOW_HEIGHT 720
 
-#define WATER_Y WINDOW_HEIGHT / 3.0
-#define HOOK_X WINDOW_WIDTH / 2.0
-#define PLAYER_X HOOK_X + 180
+#define WATER_Y WINDOW_HEIGHT / 3.0f
+#define HOOK_X WINDOW_WIDTH / 2.0f
+
+#define ICE_HOLE_WIDTH 100.0f
+#define ICE_HEIGHT 20.0f
+
+#define PLAYER_X HOOK_X + 180.0f
 
 #endif

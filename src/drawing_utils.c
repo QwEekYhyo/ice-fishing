@@ -5,6 +5,7 @@
 
 #include <stb_ds.h>
 
+#include <common_defs.h>
 #include <drawing_utils.h>
 #include <fish/fish.h>
 #include <obstacle/obstacle.h>
@@ -26,7 +27,7 @@ void draw_background(SDL_Renderer* renderer, SDL_FRect* rect) {
     rect->w = WINDOW_WIDTH;
     rect->h = WINDOW_HEIGHT;
     rect->x = 0;
-    rect->y = WATER_Y - 20.0;
+    rect->y = WATER_Y - ICE_HEIGHT;
     SDL_RenderFillRect(renderer, rect);
 
     /* Then fill with water under the water line */
@@ -36,9 +37,9 @@ void draw_background(SDL_Renderer* renderer, SDL_FRect* rect) {
 
     /* Draw the hole in the ice */
     SDL_SetRenderDrawColor(renderer, 48, 89, 145, SDL_ALPHA_OPAQUE);
-    rect->w = 100.0;
-    rect->h = 20.0;
-    rect->y = WATER_Y - 20.0;
+    rect->w = ICE_HOLE_WIDTH;
+    rect->h = ICE_HEIGHT;
+    rect->y = WATER_Y - ICE_HEIGHT;
     rect->x = HOOK_X;
     draw_rect_around_x(renderer, rect);
 }
@@ -49,7 +50,7 @@ void draw_player(SDL_Renderer* renderer) {
     rect.w = 100;
     rect.h = 150;
     rect.x = PLAYER_X;
-    rect.y = WATER_Y - 170.0; // 170 is player height (150) + ice height (20)
+    rect.y = WATER_Y - 150.0f - ICE_HEIGHT; // 150 is player height
     draw_rect_around_x(renderer, &rect);
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
     rect.w = 60;
@@ -97,7 +98,7 @@ void draw_all_fishes(SDL_Renderer* renderer, GameContext* ctx, const SDL_FRect* 
                     shget(ctx->textures, current_fish->texture),
                     NULL,
                     &fish_rect,
-                    0.0l,
+                    0.0,
                     NULL,
                     current_fish->speed > 0 ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL
                 );
@@ -139,7 +140,7 @@ void draw_all_obstacles(SDL_Renderer* renderer, GameContext* ctx, const SDL_FRec
                 shget(ctx->textures, current_obstacle->texture),
                 NULL,
                 &obstacle_rect,
-                20.0l,
+                current_obstacle->speed > 0 ? current_obstacle->texture_angle : -current_obstacle->texture_angle,
                 NULL,
                 current_obstacle->speed > 0 ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL
             );

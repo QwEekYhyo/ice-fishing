@@ -47,6 +47,7 @@ void jellyfish_new(Obstacle* obstacle) {
     self->base.w                     = 70.0f;
     self->base.h                     = 80.2f;
     self->base.texture               = "jellyfish_obstacle";
+    self->base.texture_angle         = 20.0;
     self->base.move                  = jellyfish_move;
     self->base.should_perform_action = jellyfish_action_check;
     self->base.perform_action        = jellyfish_action;

@@ -118,7 +118,7 @@ SDL_AppResult SDL_AppIterate(void* appstate) {
         as->renderer,
         as->score_text,
         HOOK_X - 20.0f - 2.0f * as->score_text->w,
-        WATER_Y - 30.0f - as->score_text->h
+        WATER_Y - ICE_HEIGHT - 10.0f - as->score_text->h
     );
 
     /* Draw static player & its fishing rod */
@@ -126,7 +126,7 @@ SDL_AppResult SDL_AppIterate(void* appstate) {
     rect.h = rect.w = 150;
 
     rect.x = HOOK_X;
-    rect.y = WATER_Y - 200;
+    rect.y = WATER_Y - 180.0f - ICE_HEIGHT;
     SDL_RenderTexture(as->renderer, shget(ctx->textures, "fishing_rod"), NULL, &rect);
 
     /* Draw fishing line and hook */

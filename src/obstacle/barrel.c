@@ -37,6 +37,7 @@ void barrel_new(Obstacle* obstacle) {
     self->base.w                     = 100.0f;
     self->base.h                     = 126.8f;
     self->base.texture               = "barrel_obstacle";
+    self->base.texture_angle         = 20.0;
     self->base.move                  = barrel_move;
     self->base.should_perform_action = barrel_action_check;
     self->base.perform_action        = barrel_action;
