@@ -13,13 +13,21 @@ struct texture_lookup {
 };
 
 typedef struct {
+    /* Hash Map storing all textures */
     struct texture_lookup* textures;
+    /* Array of all fishes */
     Fish* fishes[MAX_FISHES];
+    /* Array of all obstacles */
     Obstacle* obstacles[MAX_OBSTACLES];
+    /* Ticks of last game update */
     Uint64 last_update;
+    /* Player's score AKA number of fishes caught */
     Uint32 player_score;
+    /* Player's lives AKA number of hooks remaining */
     Uint8 player_lives;
+    /* Is the player's line currently cut */
     bool is_line_cut;
+    /* The fish currently on the line */
     Fish* caught_fish;
 } GameContext;
 
