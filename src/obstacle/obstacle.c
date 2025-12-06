@@ -27,7 +27,7 @@ void move_obstacle(Obstacle* obstacle, unsigned long delta_time) {
         obstacle->alive = 0;
         if (obstacle->type == OBSTACLETYPE_CRAB) {
             // If speed is negative when 'dying'
-            //   => crab is going from right to left 
+            //   => crab is going from right to left
             //   => crab is on the left of the hole
             current_crabs &= ~(1 << (obstacle->speed < 0));
         }
@@ -41,18 +41,17 @@ typedef struct {
 } ObstacleDesc;
 
 static const ObstacleDesc OBSTACLE_DESCS[OBSTACLE_TYPE_NUMBER] = {
-    [OBSTACLETYPE_BARREL]    = { sizeof(Barrel),    barrel_new },
+    [OBSTACLETYPE_BARREL]    = { sizeof(Barrel), barrel_new },
     [OBSTACLETYPE_JELLYFISH] = { sizeof(Jellyfish), jellyfish_new },
-    [OBSTACLETYPE_CRAB]      = { sizeof(Crab),      crab_new }, // MUST BE LAST
+    [OBSTACLETYPE_CRAB]      = { sizeof(Crab), crab_new }, // MUST BE LAST
 };
 
 Obstacle* spawn_obstacle(Obstacle* obstacle) {
     float speed = (SDL_randf() * 0.3f) + 0.1f;
 
     // This is why crab must be last in the list
-    const Uint8 new_type = SDL_rand(
-            CRAB_FULL(current_crabs) ? OBSTACLE_TYPE_NUMBER - 1 : OBSTACLE_TYPE_NUMBER
-    );
+    const Uint8 new_type =
+        SDL_rand(CRAB_FULL(current_crabs) ? OBSTACLE_TYPE_NUMBER - 1 : OBSTACLE_TYPE_NUMBER);
     const ObstacleDesc* obstacle_desc = &OBSTACLE_DESCS[new_type];
 
     // Maybe it would be more efficient
@@ -78,7 +77,7 @@ Obstacle* spawn_obstacle(Obstacle* obstacle) {
     } else if (SDL_randf() >= 0.5f) {
         speed = -speed;
     }
-        
+
     obstacle->speed = speed;
 
     obstacle_desc->init(obstacle);

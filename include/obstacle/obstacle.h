@@ -8,9 +8,9 @@
 
 #define OBSTACLE_TYPE_NUMBER 3
 typedef enum {
-    OBSTACLETYPE_BARREL = 0,
+    OBSTACLETYPE_BARREL    = 0,
     OBSTACLETYPE_JELLYFISH = 1,
-    OBSTACLETYPE_CRAB = 2,
+    OBSTACLETYPE_CRAB      = 2,
 } ObstacleType;
 
 typedef struct Obstacle {

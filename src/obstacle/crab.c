@@ -36,7 +36,7 @@ bool crab_action_check(Obstacle* obstacle, const void* context, const SDL_FRect*
         Uint64 now = SDL_GetTicks();
         if (now - self->start_time > 2000) {
             self->start_time = now;
-            self->state = CRABSTATE_PERFORMED_ACTION;
+            self->state      = CRABSTATE_PERFORMED_ACTION;
             return hook_rect->y > WATER_Y + self->base.h / 2.0f;
         }
     } else if (self->state == CRABSTATE_PERFORMED_ACTION) {
@@ -65,13 +65,13 @@ void crab_new(Obstacle* obstacle) {
 
     const float assigned_speed = self->base.speed;
 
-    self->base.w                     = 180.0f;
-    self->base.h                     = 70.0f;
-    self->base.y                     = WATER_Y;
-    self->base.speed                 = assigned_speed >= 0.0f ? CRAB_FIXED_SPEED : -CRAB_FIXED_SPEED;
-    self->base.texture               = "crab_obstacle";
-    self->base.texture_angle         = 0.0;
-    self->base.move                  = crab_move;
+    self->base.w             = 180.0f;
+    self->base.h             = 70.0f;
+    self->base.y             = WATER_Y;
+    self->base.speed         = assigned_speed >= 0.0f ? CRAB_FIXED_SPEED : -CRAB_FIXED_SPEED;
+    self->base.texture       = "crab_obstacle";
+    self->base.texture_angle = 0.0;
+    self->base.move          = crab_move;
     self->base.should_perform_action = crab_action_check;
     self->base.perform_action        = crab_action;
     self->state                      = CRABSTATE_MOVING_FORWARD;

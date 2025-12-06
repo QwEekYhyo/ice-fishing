@@ -140,7 +140,8 @@ void draw_all_obstacles(SDL_Renderer* renderer, GameContext* ctx, const SDL_FRec
                 shget(ctx->textures, current_obstacle->texture),
                 NULL,
                 &obstacle_rect,
-                current_obstacle->speed > 0 ? current_obstacle->texture_angle : -current_obstacle->texture_angle,
+                current_obstacle->speed > 0 ? current_obstacle->texture_angle
+                                            : -current_obstacle->texture_angle,
                 NULL,
                 current_obstacle->speed > 0 ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL
             );

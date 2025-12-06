@@ -74,8 +74,11 @@ SDL_AppResult SDL_AppInit(void** appstate, int argc, char* argv[]) {
     as->ctx = SDL_malloc(sizeof(GameContext));
     init_game(as->ctx);
 
-    as->lives_text =
-        text_label_new(as->font, (SDL_Color) { 0, 0, 0, 255 }, get_player_lives_text(as->ctx->player_lives));
+    as->lives_text = text_label_new(
+        as->font,
+        (SDL_Color) { 0, 0, 0, 255 },
+        get_player_lives_text(as->ctx->player_lives)
+    );
 
     init_textures(as->ctx, as->renderer);
 
@@ -86,7 +89,7 @@ SDL_AppResult SDL_AppEvent(void* appstate, SDL_Event* event) {
     if (event->type == SDL_EVENT_QUIT) return SDL_APP_SUCCESS;
 
     if (event->type == SDL_EVENT_MOUSE_BUTTON_DOWN) {
-        AppState* as = (AppState*) appstate;
+        AppState* as            = (AppState*) appstate;
         MouseClickResult result = handle_mouse_click(as->ctx);
         if (result & SCORE_UPDATED)
             text_label_set(as->score_text, get_player_score_text(as->ctx->player_score));
@@ -106,12 +109,7 @@ SDL_AppResult SDL_AppIterate(void* appstate) {
     draw_background(as->renderer, &rect);
 
     /* Draw player lives */
-    text_label_render(
-        as->renderer,
-        as->lives_text,
-        10.0f,
-        2.0f
-    );
+    text_label_render(as->renderer, as->lives_text, 10.0f, 2.0f);
 
     /* Draw player score */
     text_label_render(
@@ -135,11 +133,11 @@ SDL_AppResult SDL_AppIterate(void* appstate) {
     mouse_y = SDL_max(mouse_y, rect.y + 5);
     SDL_SetRenderDrawColor(as->renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
     SDL_RenderLine(
-            as->renderer,
-            HOOK_X,
-            rect.y,
-            HOOK_X,
-            ctx->is_line_cut ? mouse_y - 50.0f : mouse_y
+        as->renderer,
+        HOOK_X,
+        rect.y,
+        HOOK_X,
+        ctx->is_line_cut ? mouse_y - 50.0f : mouse_y
     );
 
     if (!ctx->is_line_cut) {

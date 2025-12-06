@@ -36,7 +36,7 @@ static const FishDesc FISH_DESCS[FISH_TYPE_NUMBER] = {
 Fish* spawn_fish(Fish* fish) {
     const float speed = (SDL_randf() * 2.0) - 1.0;
 
-    const Uint8 random_type = SDL_rand(FISH_TYPE_NUMBER);
+    const Uint8 random_type   = SDL_rand(FISH_TYPE_NUMBER);
     const FishDesc* fish_desc = &FISH_DESCS[random_type];
 
     void* new_memory = SDL_realloc(fish, fish_desc->size);

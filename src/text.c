@@ -9,7 +9,7 @@ void text_label_set(TextLabel* text_label, const char* new_text) {
         SDL_free(text_label->text_content);
         text_label->text_content = SDL_strdup(new_text);
         release_text_buffer();
-        text_label->dirty        = true;
+        text_label->dirty = true;
     }
 }
 
@@ -50,10 +50,10 @@ TextLabel* text_label_new(TTF_Font* font, SDL_Color color, const char* text) {
     label->color        = color;
     label->text_content = SDL_strdup(text);
     release_text_buffer();
-    label->texture      = NULL;
-    label->w            = 0.0f;
-    label->h            = 0.0f;
-    label->dirty        = true;
+    label->texture = NULL;
+    label->w       = 0.0f;
+    label->h       = 0.0f;
+    label->dirty   = true;
 
     return label;
 }
